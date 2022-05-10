@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="entrada_sistema">Enter</string>
+    <string name="olvida_clave">Forgot your password?</string>
+    <string name="correo">Email</string>
+    <string name="contraseña">Password</string>
+    <string name="app_name">UbuExoWorks</string>
+
+    <string-array name="idiomas">
+        <item>Spanish (Spain)</item>
+        <item>English (UK)</item>
+    </string-array>
+</resources>
