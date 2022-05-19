@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val spinner: Spinner = findViewById(R.id.spIdiomas)
+        val spinner: Spinner = findViewById(R.id.sp_idiomas)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             this,
@@ -27,11 +28,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
 
         spinner.onItemSelectedListener = this;
+
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
+
         if(pos==0) {
             Toast.makeText(this, "Español",Toast.LENGTH_SHORT).show()
         } else if (pos==1) {
@@ -55,15 +58,15 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             startActivity(intent)
             finish()
         } else {
-            val fallo = findViewById<TextView>(R.id.falloClave)
+            val fallo = findViewById<TextView>(R.id.txt_falloClave)
             fallo.setText("Las credenciales no son válidas")
         }
     }
 
     private fun validarCredenciales() : Boolean {
-        val correo = findViewById<EditText>(R.id.etCorreo)
+        val correo = findViewById<EditText>(R.id.et_correo)
         val esCorrectoElCorreo = correo.text.toString().equals("ubu")
-        val contraseña = findViewById<EditText>(R.id.etContraseña)
+        val contraseña = findViewById<EditText>(R.id.et_contraseña)
         val esCorrectaLaContraseña = contraseña.text.toString().equals("ppp")
         return esCorrectoElCorreo && esCorrectaLaContraseña
     }

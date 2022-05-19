@@ -14,7 +14,7 @@
     >
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spIdiomas"
+        android:id="@+id/sp_idiomas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -55,25 +55,25 @@
             -->
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etCorreoLayout"
+                android:id="@+id/et_correoLayout"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCorreo"
+                    android:id="@+id/et_correo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/correo"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/falloCorreo"
+                android:id="@+id/txt_falloCorreo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorFallo"
                 android:layout_marginBottom="15dp"
-                android:textSize="12dp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
 
@@ -106,14 +106,14 @@
             android:orientation="vertical"
             android:layout_gravity="center">
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etContraseñaLayout"
+            android:id="@+id/et_contraseñaLayout"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
             android:layout_marginBottom="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etContraseña"
+                android:id="@+id/et_contraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contraseña"
@@ -121,16 +121,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/falloClave"
+                android:id="@+id/txt_falloClave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorFallo"
                 android:layout_marginBottom="15dp"
-                android:textSize="12dp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_Login"
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
@@ -141,14 +141,19 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_gravity="center"
             android:onClick="irArecordarClave">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/olvida_clave"
+                android:text="@string/olvida"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/ayuda"
                 android:textColor="@color/design_default_color_primary"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

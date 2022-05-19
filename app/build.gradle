@@ -43,4 +43,7 @@ dependencies {
 
     //Añadido para mostrar u ocultar la contraseña
     implementation 'com.google.android.material:material:1.1.0'
+
+    //FusedLocationProvider
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }
