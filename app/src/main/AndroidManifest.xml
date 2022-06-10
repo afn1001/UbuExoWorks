@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UbuExoWorks">
         <activity
-            android:name=".MainActivity"
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,15 +25,15 @@
         </activity>
 
         <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".RecordarClave"
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Usuario"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".Calendario"
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
 

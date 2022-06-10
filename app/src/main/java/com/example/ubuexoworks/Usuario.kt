@@ -51,9 +51,4 @@ class Usuario : AppCompatActivity() {
 
         }
     }
-
-    fun irACalendario(view: View) {
-        val intent = Intent(this, Calendario::class.java)
-        startActivity(intent)
-    }
 }
