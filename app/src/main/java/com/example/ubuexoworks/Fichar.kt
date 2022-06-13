@@ -1,5 +1,6 @@
 package com.example.ubuexoworks
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -36,10 +37,8 @@ class Fichar : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-
-        val view: View = inflater.inflate(com.example.ubuexoworks.R.layout.fragment_fichar, container, false)
-        view.findViewById<Button>(com.example.ubuexoworks.R.id.btn_fichar).setOnClickListener() {
+        val view: View = inflater.inflate(R.layout.fragment_fichar, container, false)
+        view.findViewById<Button>(R.id.btn_fichar).setOnClickListener() {
             obtenerUbicación(view)
         }
 
@@ -50,9 +49,9 @@ class Fichar : Fragment() {
     private fun obtenerUbicación(view : View) {
         val task = fusedLocationProviderClient.lastLocation
         //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
-        if(ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
+        if(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
         }
         task.addOnSuccessListener {
             if(it != null) {

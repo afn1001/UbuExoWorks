@@ -5,7 +5,7 @@
     <string name="entrada_sistema">Entrada al sistema</string>
     <string name="correo">Correo electrónico</string>
     <string name="contraseña">Contraseña</string>
-
+    
     <string-array name="idiomas">
         <item>Español (España)</item>
         <item>Inglés (Reino Unido)</item>

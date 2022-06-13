@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var consultarCalendario: ConsultarCalendario
     lateinit var datosUsuario: DatosUsuario
     lateinit var fichar: Fichar
+    lateinit var dietas: Dietas
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,14 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.frameLayout,fichar)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit()
+                }
+                R.id.dietas -> {
+                    dietas = Dietas()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.frameLayout,dietas)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit()
                 }
