@@ -42,8 +42,9 @@ class RecordarClave : AppCompatActivity() {
     }
 
     fun irALogin(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, Login::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 }

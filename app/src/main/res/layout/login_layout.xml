@@ -59,13 +59,17 @@
                 android:id="@+id/et_correoLayout"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/et_correo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/correo"/>
+                    android:hint="@string/correo"
+
+                    android:background="@drawable/edit_text_bg"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -75,50 +79,24 @@
                 android:textColor="@color/colorFallo"
                 android:layout_marginBottom="15dp"
                 android:textSize="12sp"/>
-        </LinearLayout>
 
-
-        <!--- <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-
-            <EditText
-                android:id="@+id/clave"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:background="@drawable/borde_cuenta_pago"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:padding="10dp"
-                android:hint="@string/contraseña"
-                android:textColorHint="@color/colorBordeCuentaPago">
-            </EditText>
-        </LinearLayout>
-        -->
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_contraseñaLayout"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/et_contraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contraseña"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:background="@drawable/edit_text_bg"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -128,18 +106,21 @@
                 android:textColor="@color/colorFallo"
                 android:layout_marginBottom="15dp"
                 android:textSize="12sp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_text_bg"/>
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:onClick="irAMain"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_recuperar_clave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -157,6 +138,8 @@
                 android:text="@string/ayuda"
                 android:textColor="@color/design_default_color_primary"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

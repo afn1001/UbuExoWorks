@@ -2,17 +2,31 @@ package com.example.ubuexoworks
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.lang.Exception
 
 
 class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
+    private lateinit var retrofit: Retrofit
+    private lateinit var service: ApiService
+    private lateinit var user: Usuario
+    private var email: String = ""
+    private var password: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_activity)
+        setContentView(R.layout.login_layout)
 
         val spinner: Spinner = findViewById(R.id.sp_idiomas)
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -29,6 +43,108 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         spinner.onItemSelectedListener = this;
 
+        //Creamos el servicio
+        service = createApiService()
+
+        //Lógica para realizar el login
+        val emailInput = findViewById<EditText>(R.id.et_correo)
+        val passwordInput = findViewById<EditText>(R.id.et_contraseña)
+
+        val loginButton = findViewById<Button>(R.id.btn_login)
+        loginButton.setOnClickListener {
+            email = emailInput.text.toString().trim()
+            password = passwordInput.text.toString().trim()
+            if(email.isNotEmpty()) {
+                if(password.isNotEmpty()) {
+                    executeLogin(email, password)
+                } else {
+                    Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Email vacío", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        //Animaciones
+        val emailLayout = findViewById<TextInputLayout>(R.id.et_correoLayout)
+        emailLayout.translationX = 1000f
+        emailLayout.alpha = 0f
+        emailLayout.animate().apply {
+            duration = 1000
+            startDelay = 300
+            translationX(0f)
+            alpha(1f)
+
+        }.start()
+
+        val passwordLayout = findViewById<TextInputLayout>(R.id.et_contraseñaLayout)
+        passwordLayout.translationX = 1000f
+        passwordLayout.alpha = 0f
+        passwordLayout.animate().apply {
+            duration = 1000
+            startDelay = 500
+            translationX(0f)
+            alpha(1f)
+
+        }.start()
+
+        loginButton.translationX = 1000f
+        loginButton.alpha = 0f
+        loginButton.animate().apply {
+            duration = 1000
+            startDelay = 700
+            translationX(0f)
+            alpha(1f)
+
+        }.start()
+
+        val recuperarClave = findViewById<TextInputLayout>(R.id.til_recuperar_clave)
+        recuperarClave.translationX = 1000f
+        recuperarClave.alpha = 0f
+        recuperarClave.animate().apply {
+            duration = 1000
+            startDelay = 700
+            translationX(0f)
+            alpha(1f)
+
+        }.start()
+
+
+    }
+
+    private fun executeLogin(email: String, password: String) {
+        val call = service.login("login", email, password)
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if(response.isSuccessful && response.body() != null) {
+                    //Intentamos mapear el json a la clase Usuario
+                    try {
+                        val jsonUser = JSONObject(response.body()!!)
+                        val jsonId = jsonUser.optString("reason")
+                        user = Usuario(jsonId)
+
+                        Toast.makeText(this@Login, user.id, Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Log.d("login", e.toString())
+                        Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@Login, "Login incorrecto", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("login", t.toString())
+            }
+        })
+    }
+
+    private fun createApiService() : ApiService {
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://restful-booker.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        return retrofit.create(ApiService::class.java)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -43,13 +159,12 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
     }
 
     fun irArecordarClave(view: View) {
         val intent = Intent(this, RecordarClave::class.java)
         startActivity(intent)
-        finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
     fun irAMain(view: View) {
