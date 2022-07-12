@@ -39,22 +39,6 @@
             android:orientation="vertical"
             android:layout_gravity="center">
 
-            <!---
-            <EditText
-                android:id="@+id/correoElectronico"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:inputType="text"
-                android:ems="10"
-                android:background="@drawable/borde_cuenta_pago"
-                android:padding="10dp"
-                android:layout_marginBottom="5dp"
-                android:hint="@string/correo"
-                android:textColorHint="@color/colorBordeCuentaPago">
-            </EditText>
-            -->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_correoLayout"
                 android:layout_width="350dp"
@@ -67,6 +51,7 @@
                     android:id="@+id/et_correo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     android:hint="@string/correo"
 
                     android:background="@drawable/edit_text_bg"/>

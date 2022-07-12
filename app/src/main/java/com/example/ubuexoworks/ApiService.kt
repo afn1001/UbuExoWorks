@@ -1,14 +1,16 @@
 package com.example.ubuexoworks
 
+import com.google.gson.JsonElement
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
 
-    @FormUrlEncoded
-    @POST("/auth")
-    fun login(@Field("funcion") function: String,
-              @Field("username") username: String,
-              @Field("password") password: String) : Call<String>
+    @POST("/api/login")
+    fun login(@Body crdenciales: Credenciales) : Call<String>
+
+
 
 }

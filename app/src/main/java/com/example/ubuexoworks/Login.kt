@@ -7,13 +7,17 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.lang.Exception
 
 
 class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -23,6 +27,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var user: Usuario
     private var email: String = ""
     private var password: String = ""
+    private lateinit var fallo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,25 +118,32 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun executeLogin(email: String, password: String) {
-        val call = service.login("login", email, password)
+        val credenciales = Credenciales(email, password)
+
+        val call = service.login(credenciales)
+
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
+
                 if(response.isSuccessful && response.body() != null) {
                     //Intentamos mapear el json a la clase Usuario
                     try {
                         val jsonUser = JSONObject(response.body()!!)
-                        val jsonId = jsonUser.optString("reason")
-                        user = Usuario(jsonId)
+                        val jsonId = jsonUser.optString("token")
 
-                        Toast.makeText(this@Login, user.id, Toast.LENGTH_SHORT).show()
+                        if(jsonId.equals("OK")) {
+                            irAMain()
+                        }
                     } catch (e: Exception) {
                         Log.d("login", e.toString())
                         Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@Login, "Login incorrecto", Toast.LENGTH_SHORT).show()
+                    fallo = findViewById(R.id.txt_falloClave)
+                    fallo.setText("Credenciales inválidas")
                 }
             }
+
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.d("login", t.toString())
@@ -141,11 +153,13 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun createApiService() : ApiService {
         retrofit = Retrofit.Builder()
-            .baseUrl("https://restful-booker.herokuapp.com/")
+            .baseUrl("https://miubuapp.herokuapp.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(ApiService::class.java)
     }
+
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
@@ -167,15 +181,9 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
-    fun irAMain(view: View) {
-        if(validarCredenciales()) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        } else {
-            val fallo = findViewById<TextView>(R.id.txt_falloClave)
-            fallo.setText("Las credenciales no son válidas")
-        }
+    fun irAMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun validarCredenciales() : Boolean {
