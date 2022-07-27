@@ -11,6 +11,9 @@ interface ApiService {
     @POST("/api/login")
     fun login(@Body crdenciales: Credenciales) : Call<String>
 
+    @POST("/api/fichaje")
+    fun fichar(@Body fichaje: Fichaje) : Call<String>
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.ubuexoworks
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,10 +8,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,10 +21,10 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var retrofit: Retrofit
     private lateinit var service: ApiService
-    private lateinit var user: Usuario
     private var email: String = ""
     private var password: String = ""
     private lateinit var fallo: TextView
+    private var jsonId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,9 +126,14 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     //Intentamos mapear el json a la clase Usuario
                     try {
                         val jsonUser = JSONObject(response.body()!!)
-                        val jsonId = jsonUser.optString("token")
+                        jsonId = jsonUser.optInt("token")
 
-                        if(jsonId.equals("OK")) {
+                        if(jsonId != 0) {
+                            val sp = getSharedPreferences("Login", Context.MODE_PRIVATE)
+                            val ed = sp.edit()
+                            ed.putInt("Id", jsonId)
+                            ed.commit()
+
                             irAMain()
                         }
                     } catch (e: Exception) {

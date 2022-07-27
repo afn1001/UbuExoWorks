@@ -25,6 +25,27 @@
             android:layout_gravity="center"
             android:text="Nada"/>
 
+        <TextView
+            android:id="@+id/txt_fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Fecha"/>
+
+        <TextView
+            android:id="@+id/txt_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Hora"/>
+
+        <TextView
+            android:id="@+id/txt_idUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Nada"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

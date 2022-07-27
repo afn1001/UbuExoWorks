@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var datosUsuario: DatosUsuario
     lateinit var fichar: Fichar
     lateinit var dietas: Dietas
+    var id: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
