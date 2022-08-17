@@ -1,4 +1,4 @@
-package com.example.ubuexoworks
+package com.example.ubuexoworks.ClasesDeDatos
 
 import kotlinx.serialization.Serializable
 

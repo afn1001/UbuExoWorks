@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha:               "
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+
+            <TextView
+                android:id="@+id/tv_fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nada"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora:                 "
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+
+            <TextView
+                android:id="@+id/tv_hora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nada"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitud:          "
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+
+            <TextView
+                android:id="@+id/tv_longitud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nada"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitud:             "
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+
+            <TextView
+                android:id="@+id/tv_latitud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nada"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
