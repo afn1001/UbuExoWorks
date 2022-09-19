@@ -45,6 +45,7 @@ class Fichar : Fragment() {
     private var longitud: String = ""
     private var latitud: String = ""
     private var idUsuario: Int = 0
+    private var tokenUsuario: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +58,15 @@ class Fichar : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_fichar, container, false)
         val idView : TextView = view.findViewById(R.id.txt_idUsuario)
+        val tokenView : TextView = view.findViewById(R.id.txt_tokenUsuario)
 
         //Se obtienen los datos del id de usuario
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", MODE_PRIVATE)
         idUsuario = preferences.getInt("Id", 0)
         idView.setText(idUsuario.toString())
+
+        tokenUsuario = preferences.getString("Token","")
+        tokenView.setText(tokenUsuario)
 
         //Creamos el servicio
         service = createApiService()
@@ -82,7 +87,7 @@ class Fichar : Fragment() {
         val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
         val fichaje = Fichaje(idUsuario, fecha, hora, longitud, latitud)
-        val call = service.fichar(fichaje)
+        val call = service.fichar("Bearer " + tokenUsuario, fichaje)
 
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {

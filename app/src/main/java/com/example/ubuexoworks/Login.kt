@@ -1,12 +1,20 @@
 package com.example.ubuexoworks
 
+import android.Manifest
+import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.ubuexoworks.ClasesDeDatos.Credenciales
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
@@ -24,20 +32,19 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var service: ApiService
     private var email: String = ""
     private var password: String = ""
+    private var myImei: String = ""
     private lateinit var fallo: TextView
     private var jsonId: Int = 0
+    private var jsonToken: String = ""
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
         val spinner: Spinner = findViewById(R.id.sp_idiomas)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.idiomas,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
+        ArrayAdapter.createFromResource(this, R.array.idiomas, android.R.layout.simple_spinner_item).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
@@ -53,13 +60,16 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val emailInput = findViewById<EditText>(R.id.et_correo)
         val passwordInput = findViewById<EditText>(R.id.et_contraseña)
 
+        myImei = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        //Toast.makeText(this, myImei, Toast.LENGTH_SHORT).show()
+
         val loginButton = findViewById<Button>(R.id.btn_login)
         loginButton.setOnClickListener {
             email = emailInput.text.toString().trim()
             password = passwordInput.text.toString().trim()
             if(email.isNotEmpty()) {
                 if(password.isNotEmpty()) {
-                    executeLogin(email, password)
+                    executeLogin(email, password, "121212")
                 } else {
                     Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
                 }
@@ -68,7 +78,24 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }
 
+        val registrarButton = findViewById<Button>(R.id.btn_registrarDispositivo)
+        registrarButton.setOnClickListener {
+            email = emailInput.text.toString().trim()
+            password = passwordInput.text.toString().trim()
+            if(email.isNotEmpty()) {
+                if(password.isNotEmpty()) {
+                    registrarDispositivo(email, password, myImei)
+                } else {
+                    Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Email vacío", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
         //Animaciones
+        /*
         val emailLayout = findViewById<TextInputLayout>(R.id.et_correoLayout)
         emailLayout.translationX = 1000f
         emailLayout.alpha = 0f
@@ -112,12 +139,12 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         }.start()
 
+         */
 
     }
 
-    private fun executeLogin(email: String, password: String) {
-        val credenciales = Credenciales(email, password)
-
+    private fun executeLogin(email: String, password: String, imei: String) {
+        val credenciales = Credenciales(email, password, imei)
         val call = service.login(credenciales)
 
         call.enqueue(object : Callback<String> {
@@ -127,11 +154,13 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     //Intentamos mapear el json a la clase Usuario
                     try {
                         val jsonUser = JSONObject(response.body()!!)
-                        jsonId = jsonUser.optInt("token")
+                        jsonId = jsonUser.optInt("idUsuario")
+                        jsonToken = jsonUser.optString("token")
 
-                        if(jsonId != 0) {
+                        if(jsonId != 0 || jsonToken.isEmpty()) {
                             val sp = getSharedPreferences("Login", Context.MODE_PRIVATE)
                             val ed = sp.edit()
+                            ed.putString("Token", jsonToken)
                             ed.putInt("Id", jsonId)
                             ed.commit()
 
@@ -142,14 +171,40 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    fallo = findViewById(R.id.txt_falloClave)
-                    fallo.setText("Credenciales inválidas")
+                    Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
                 }
             }
 
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.d("login", t.toString())
+            }
+        })
+    }
+
+    private fun registrarDispositivo(email: String, password: String, imei: String) {
+        val credenciales = Credenciales(email, password, imei)
+        val call = service.registraDispositivo(credenciales)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if(response.isSuccessful && response.body() != null) {
+                    try {
+                        val jsonUser = JSONObject(response.body()!!)
+                        Toast.makeText(this@Login, jsonUser.optString("token"), Toast.LENGTH_SHORT).show()
+
+                    } catch (e: Exception) {
+                        Log.d("registroDispositivo", e.toString())
+                        Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("registroDispositivo", t.toString())
             }
         })
     }
@@ -169,7 +224,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // parent.getItemAtPosition(pos)
 
         if(pos==0) {
-            Toast.makeText(this, "Español",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Español",Toast.LENGTH_SHORT).show()
         } else if (pos==1) {
             Toast.makeText(this, "Inglés",Toast.LENGTH_SHORT).show()
         }
@@ -178,7 +233,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>) {
     }
 
-    fun irArecordarClave(view: View) {
+    fun irArecordarClave() {
         val intent = Intent(this, RecordarClave::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)

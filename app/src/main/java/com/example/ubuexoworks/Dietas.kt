@@ -3,12 +3,16 @@ package com.example.ubuexoworks
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,18 +23,33 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.ubuexoworks.ClasesDeDatos.Gasto
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class Dietas : Fragment() {
+    private lateinit var retrofit: Retrofit
+    private lateinit var service: ApiService
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var ivPhoto: ImageView
@@ -39,11 +58,13 @@ class Dietas : Fragment() {
     private lateinit var image : InputImage
     private lateinit var bitmap : Bitmap
 
+    private var idUsuario: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_dietas, container, false)
 
@@ -72,8 +93,14 @@ class Dietas : Fragment() {
 
         val textoDNI : TextView = view.findViewById(R.id.text_dni)
 
-        val botonReconocerTexto : Button = view.findViewById(R.id.btn_reconocerTexto)
+        //Se obtienen los datos del id de usuario
+        val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE)
+        idUsuario = preferences.getInt("Id", 0).toString()
 
+        //Creamos el servicio
+        service = createApiService()
+
+        val botonReconocerTexto : Button = view.findViewById(R.id.btn_reconocerTexto)
         botonReconocerTexto.setOnClickListener { view ->
             image = InputImage.fromBitmap(bitmap, 0)
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -102,11 +129,89 @@ class Dietas : Fragment() {
                     // Task failed with an exception
                     // ...
                 }
+
+            val botonEnviarGasto : Button = view.findViewById(R.id.btn_enviarGasto)
+            botonEnviarGasto.setOnClickListener { view ->
+                val file = bitmapToFile(bitmap, "gasto")
+                enviarGasto(file)
+            }
         }
 
 
         return view
     }
+
+
+    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(Environment.getExternalStorageDirectory().toString() + File.separator + fileNameToSave)
+            file.createNewFile()
+
+            //Convert bitmap to byte array
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+            val bitmapdata = bos.toByteArray()
+
+            //write the bytes in file
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file // it will return null
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun enviarGasto(file: File?) {
+        val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+
+        val gasto = Gasto(file, idUsuario, fecha, "ticket","transporte", 1512.5, 262.5, "12345678A", "Cena empresa", "0001")
+
+        val call = service.registrarGasto(gasto)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+
+                if(response.isSuccessful && response.body() != null) {
+                    //Intentamos mapear el json a la clase Usuario
+                    try {
+                        val jsonUser = JSONObject(response.body()!!)
+                        val token = jsonUser.optString("token")
+
+
+                        if(token.equals("OK")) {
+                            Toast.makeText(context, "Funciona", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Log.d("registrarGasto", e.toString())
+                        Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                }
+            }
+
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("login", t.toString())
+            }
+        })
+    }
+
+    private fun createApiService() : ApiService {
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://miubuapp.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(ApiService::class.java)
+    }
+
 
     private fun findSecondLargestFloat(input: ArrayList<Float>?): Float {
         if (input == null || input.isEmpty() || input.size == 1) return 0.0f

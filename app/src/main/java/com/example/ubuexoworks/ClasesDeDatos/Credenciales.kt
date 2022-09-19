@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Credenciales(
     val login: String,
-    val password: String
+    val password: String,
+    val imei: String
 )

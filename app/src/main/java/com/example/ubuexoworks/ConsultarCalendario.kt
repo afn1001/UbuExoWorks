@@ -38,6 +38,7 @@ class ConsultarCalendario : Fragment() {
     private lateinit var service: ApiService
     private var idUsuario: Int = 0
     lateinit var listFichajes: ArrayList<FichajeObtenido>
+    private var tokenUsuario: String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,7 @@ class ConsultarCalendario : Fragment() {
         //Se obtienen los datos del id de usuario
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE)
         idUsuario = preferences.getInt("Id", 0)
+        tokenUsuario = preferences.getString("Token","")
 
         val txtEntrada = view.findViewById<TextView>(R.id.txtHoraEntrada)
         val txtSalida = view.findViewById<TextView>(R.id.txtHoraSalida)
@@ -76,7 +78,8 @@ class ConsultarCalendario : Fragment() {
             txtSalida.setText(diaDelMes)
 
             //Obtenemos los fichajes del día que deseamos
-            val estaFecha = LocalDate.of(year, month+1, dayOfMonth).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            val estaFecha = LocalDate.of(year, month, dayOfMonth).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            txtSalida.setText(estaFecha)
             obtenerFichajes(estaFecha)
         }
 
@@ -87,7 +90,7 @@ class ConsultarCalendario : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerFichajes(fecha: String) {
-        val call: Call<ArrayList<FichajeObtenido>> = service.getFichaje(idUsuario.toString(), fecha)
+        val call: Call<ArrayList<FichajeObtenido>> = service.getFichaje("Bearer " + tokenUsuario, idUsuario, fecha)
 
         call.enqueue(object : Callback<ArrayList<FichajeObtenido>> {
             override fun onResponse(call: Call<ArrayList<FichajeObtenido>>, response: Response<ArrayList<FichajeObtenido>>) {
