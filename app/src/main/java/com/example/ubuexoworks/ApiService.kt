@@ -17,10 +17,10 @@ interface ApiService {
     fun fichar(@Header("Authorization") Token: String?,
                @Body fichaje: Fichaje) : Call<String>
 
-    @GET("/api/get/fichaje/fecha")
+    @GET("/api/get/fichaje")
     fun getFichaje(@Header("Authorization") Token: String?,
                    @Query("idUsuario") id: Int,
-                   @Query(value="fecha", encoded = true) fecha: String) : Call<ArrayList<FichajeObtenido>>
+                   @Query("fecha", encoded = true) fecha: String) : Call<ArrayList<FichajeObtenido>>
 
 
     @POST("/api/gasto/registraGasto")
@@ -29,6 +29,9 @@ interface ApiService {
     @GET("/api/get/usuario")
     fun getDatosUsuario(@Header("Authorization") Token: String?,
                         @Query("idUsuario") id: Int) : Call<String>
+
+    @GET("/api/usuario/recuperaPassword")
+    fun recuperaContraseña(@Query("email") email: String) : Call<String>
 
 
 

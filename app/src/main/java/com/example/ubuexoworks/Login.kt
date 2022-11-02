@@ -1,22 +1,16 @@
 package com.example.ubuexoworks
 
-import android.Manifest
-import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.example.ubuexoworks.ClasesDeDatos.Credenciales
-import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -233,7 +227,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>) {
     }
 
-    fun irArecordarClave() {
+    fun irARecordarClave(view: View) {
         val intent = Intent(this, RecordarClave::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)

@@ -1,8 +1,8 @@
 package com.example.ubuexoworks
 
 import android.Manifest
+import android.content.*
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -47,8 +47,15 @@ class Fichar : Fragment() {
     private var idUsuario: Int = 0
     private var tokenUsuario: String? = ""
 
+    //Timer
+    lateinit var ayudaContador: AyudaContador
+
+    private val timer = Timer()
+    private lateinit var tvTiempo: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -58,24 +65,46 @@ class Fichar : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_fichar, container, false)
         val idView : TextView = view.findViewById(R.id.txt_idUsuario)
-        val tokenView : TextView = view.findViewById(R.id.txt_tokenUsuario)
 
         //Se obtienen los datos del id de usuario
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", MODE_PRIVATE)
         idUsuario = preferences.getInt("Id", 0)
         idView.setText(idUsuario.toString())
 
+        //Se obtiene el token para poder realizar llamadas a la Api con seguridad
         tokenUsuario = preferences.getString("Token","")
-        tokenView.setText(tokenUsuario)
 
         //Creamos el servicio
         service = createApiService()
 
         //Botón para fichar
-
         view.findViewById<Button>(R.id.btn_fichar).setOnClickListener {
             obtenerUbicación()
         }
+
+        //Timer
+        tvTiempo = view.findViewById(R.id.txt_tiempo)
+        ayudaContador = AyudaContador(requireContext())
+        view.findViewById<Button>(R.id.btn_start).setOnClickListener {
+            iniciarPararContador()
+        }
+
+        view.findViewById<Button>(R.id.btn_reset).setOnClickListener {
+            resetAction()
+        }
+
+        if(ayudaContador.estaContando()) {
+            iniciarContador()
+        } else {
+            pararContador()
+            if(ayudaContador.startTime() != null && ayudaContador.pararTiempo() != null) {
+                val time = Date().time - calcTiempoReinicio().time
+                tvTiempo.text = tiempoDeLongAString(time)
+            }
+        }
+
+
+        timer.scheduleAtFixedRate(TimeTask(), 0, 500)
 
         return view
 
@@ -148,9 +177,61 @@ class Fichar : Fragment() {
 
                 fichar()
             }
-
         }
+    }
 
 
+
+    private inner class TimeTask: TimerTask() {
+        override fun run() {
+            if(ayudaContador.estaContando()) {
+                activity?.runOnUiThread({
+                    val time = Date().time - ayudaContador.startTime()!!.time
+                    tvTiempo.text = tiempoDeLongAString(time)
+                })
+            }
+        }
+    }
+
+    private fun resetAction() {
+        ayudaContador.setTiempoParar(null)
+        ayudaContador.setTiempoIniciar(null)
+        pararContador()
+        tvTiempo.text = tiempoDeLongAString(0)
+    }
+
+    private fun pararContador() {
+        ayudaContador.setEstaContando(false)
+    }
+
+    private fun iniciarContador() {
+        ayudaContador.setEstaContando(true)
+    }
+
+    private fun iniciarPararContador() {
+        if(ayudaContador.estaContando()) {
+            ayudaContador.setTiempoParar(Date())
+            pararContador()
+        } else {
+            if(ayudaContador.pararTiempo() != null) {
+                ayudaContador.setTiempoIniciar(calcTiempoReinicio())
+                ayudaContador.setTiempoParar(null)
+            } else {
+                ayudaContador.setTiempoIniciar(Date()) }
+            iniciarContador()
+        }
+    }
+
+    private fun calcTiempoReinicio(): Date {
+        val diff = ayudaContador.startTime()!!.time - ayudaContador.pararTiempo()!!.time
+        return Date(System.currentTimeMillis() + diff)
+    }
+
+    private fun tiempoDeLongAString(ms: Long): String {
+        val seconds = (ms / 1000) % 60
+        val minutes = (ms / (1000 * 60) % 60)
+        val hours = (ms / (1000 * 60 * 60) % 24)
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
+

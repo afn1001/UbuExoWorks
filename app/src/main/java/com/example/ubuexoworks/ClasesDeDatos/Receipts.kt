@@ -1,4 +1,4 @@
-package com.example.ubuexoworks
+package com.example.ubuexoworks.ClasesDeDatos
 
 data class Receipts(
     var total: String,

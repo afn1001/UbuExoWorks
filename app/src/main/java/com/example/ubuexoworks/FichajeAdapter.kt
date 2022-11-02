@@ -30,13 +30,13 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
         tvFecha.setText(fichaje.fecha)
 
         val tvHora: TextView = view.findViewById(R.id.tv_hora)
-        tvHora.setText(fichaje.hora_entrada)
+        tvHora.setText(fichaje.hora)
 
         val tvLongitud: TextView = view.findViewById(R.id.tv_longitud)
-        tvLongitud.setText(fichaje.entradaLongitud.toString())
+        tvLongitud.setText(fichaje.longitud.toString())
 
         val tvLatitud: TextView = view.findViewById(R.id.tv_latitud)
-        tvLatitud.setText(fichaje.entradaLatitud.toString())
+        tvLatitud.setText(fichaje.latitud.toString())
 
         return view
     }

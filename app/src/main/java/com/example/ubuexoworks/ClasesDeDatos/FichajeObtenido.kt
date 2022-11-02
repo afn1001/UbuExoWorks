@@ -1,13 +1,13 @@
 package com.example.ubuexoworks.ClasesDeDatos
 
 data class FichajeObtenido(
+    val ID: Int,
     val borrado: Boolean,
-    val entradaLatitud: Float,
-    val entradaLongitud: Float,
     val fecha: String,
-    val hora_entrada:String,
-    val idFichaje: Int,
-    val idUsuario: Int,
+    val hora: String,
     val incidencia: String,
+    val latitud: Float,
+    val longitud: Float,
+    val tiempoTrabajado: String,
     val tipo: String
 )

@@ -75,10 +75,10 @@ class ConsultarCalendario : Fragment() {
             val mes = "" + month
             val diaDelMes = "" + dayOfMonth
             txtEntrada.setText(mes)
-            txtSalida.setText(diaDelMes)
+            //txtSalida.setText(diaDelMes)
 
             //Obtenemos los fichajes del día que deseamos
-            val estaFecha = LocalDate.of(year, month, dayOfMonth).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            val estaFecha = LocalDate.of(year, month+1, dayOfMonth).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
             txtSalida.setText(estaFecha)
             obtenerFichajes(estaFecha)
         }
@@ -94,13 +94,15 @@ class ConsultarCalendario : Fragment() {
 
         call.enqueue(object : Callback<ArrayList<FichajeObtenido>> {
             override fun onResponse(call: Call<ArrayList<FichajeObtenido>>, response: Response<ArrayList<FichajeObtenido>>) {
+
                 if(response.isSuccessful && response.body() != null) {
+                    Toast.makeText(requireContext(), "Entra", Toast.LENGTH_SHORT).show()
                     listFichajes = response.body()!!
 
                     Log.d("TAG", response.body().toString())
                     try {
                         val txtHora = requireActivity().findViewById<TextView>(R.id.txtHoraSalida)
-                        txtHora.setText(listFichajes[1].hora_entrada)
+                        txtHora.setText(listFichajes[1].hora)
                     } catch (e: Exception) {
 
                     }
@@ -108,10 +110,10 @@ class ConsultarCalendario : Fragment() {
                     //Inicializamos el adaptador para la lista de fichajes
                     val adapter = FichajeAdapter(requireContext(), listFichajes)
 
-                    val lvFichajes = requireActivity().findViewById<ListView>(R.id.lv_fichajes)
-                    lvFichajes.adapter = adapter
+                    val lvFichajes = activity?.findViewById<ListView>(R.id.lv_fichajes)
+                    lvFichajes?.adapter = adapter
                 } else {
-                    Toast.makeText(context, "Falla", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Falla", Toast.LENGTH_SHORT).show()
                 }
             }
 
