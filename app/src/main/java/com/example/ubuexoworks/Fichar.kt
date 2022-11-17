@@ -1,12 +1,18 @@
 package com.example.ubuexoworks
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.*
 import android.content.Context.MODE_PRIVATE
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +21,12 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemServiceName
 import androidx.fragment.app.Fragment
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -46,12 +57,16 @@ class Fichar : Fragment() {
     private var latitud: String = ""
     private var idUsuario: Int = 0
     private var tokenUsuario: String? = ""
+    private lateinit var builder: NotificationCompat.Builder
 
     //Timer
     lateinit var ayudaContador: AyudaContador
 
     private val timer = Timer()
     private lateinit var tvTiempo: TextView
+
+    //Id de la notificación
+    private val ID_CANAL = "canal01"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,11 +118,37 @@ class Fichar : Fragment() {
             }
         }
 
-
         timer.scheduleAtFixedRate(TimeTask(), 0, 500)
+
+
+        //Builder para la notificación
+        createNotificationChannel()
+        builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
+            .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
+            .setContentTitle("Recuerda el fichaje de salida")
+            .setContentText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
 
         return view
 
+    }
+
+    //Permite crear una notificación
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nombre = "MiNotificación"
+            val descripcion = "Mi descripción de la notificación"
+            val importancia = NotificationManager.IMPORTANCE_DEFAULT
+            val canal = NotificationChannel(ID_CANAL, nombre, importancia).apply {
+                description = descripcion
+            }
+            //Registra el canal al sistema
+            val notificationManager: NotificationManager = activity?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(canal)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -231,7 +272,18 @@ class Fichar : Fragment() {
         val seconds = (ms / 1000) % 60
         val minutes = (ms / (1000 * 60) % 60)
         val hours = (ms / (1000 * 60 * 60) % 24)
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+        val timer = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+
+        if(timer.equals("00:00:05")) {
+            with(NotificationManagerCompat.from(requireContext())) {
+                // notificationId is a unique int for each notification that you must define
+                notify(123, builder.build())
+            }
+        }
+
+        return timer
     }
 }
 

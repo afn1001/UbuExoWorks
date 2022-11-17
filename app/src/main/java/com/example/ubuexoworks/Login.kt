@@ -238,12 +238,4 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         startActivity(intent)
     }
 
-    private fun validarCredenciales() : Boolean {
-        val correo = findViewById<EditText>(R.id.et_correo)
-        val esCorrectoElCorreo = correo.text.toString().equals("ubu")
-        val contraseña = findViewById<EditText>(R.id.et_contraseña)
-        val esCorrectaLaContraseña = contraseña.text.toString().equals("ppp")
-        return esCorrectoElCorreo && esCorrectaLaContraseña
-    }
-
 }

@@ -10,4 +10,10 @@
         <item>Español (España)</item>
         <item>Inglés (Reino Unido)</item>
     </string-array>
+
+    <!--Strings de dialog para borrar el fichaje  -->
+    <string name="pregunta">¿Estás seguro de que quieres eliminar este fichaje?</string>
+    <string name="aceptar">Sí</string>
+    <string name="rechazar">No</string>
+
 </resources>

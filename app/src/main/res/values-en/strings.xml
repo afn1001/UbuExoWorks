@@ -11,4 +11,9 @@
         <item>Spanish (Spain)</item>
         <item>English (UK)</item>
     </string-array>
+
+    <!--Strings de dialog para borrar el fichaje  -->
+    <string name="pregunta">Are you sure you want to delete this signing?</string>
+    <string name="aceptar">Yes</string>
+    <string name="rechazar">No</string>
 </resources>

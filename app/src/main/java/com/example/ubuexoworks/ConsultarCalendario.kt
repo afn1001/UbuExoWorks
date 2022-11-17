@@ -61,8 +61,6 @@ class ConsultarCalendario : Fragment() {
         //Creamos el servicio
         service = createApiService()
 
-
-
         //Lista con todos los fichajes
         listFichajes = ArrayList()
 
@@ -96,7 +94,6 @@ class ConsultarCalendario : Fragment() {
             override fun onResponse(call: Call<ArrayList<FichajeObtenido>>, response: Response<ArrayList<FichajeObtenido>>) {
 
                 if(response.isSuccessful && response.body() != null) {
-                    Toast.makeText(requireContext(), "Entra", Toast.LENGTH_SHORT).show()
                     listFichajes = response.body()!!
 
                     Log.d("TAG", response.body().toString())

@@ -3,7 +3,6 @@ package com.example.ubuexoworks
 import com.example.ubuexoworks.ClasesDeDatos.*
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 interface ApiService {
 
@@ -33,6 +32,8 @@ interface ApiService {
     @GET("/api/usuario/recuperaPassword")
     fun recuperaContraseña(@Query("email") email: String) : Call<String>
 
-
+    @POST("/api/usuario/solicitudBorrado")
+    fun solicitudBorrado(@Header("Authorization") Token: String?,
+                         @Body fichajeEliminar: FichajeEliminar) : Call<String>
 
 }

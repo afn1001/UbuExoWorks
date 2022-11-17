@@ -4,9 +4,14 @@
     package="com.example.ubuexoworks">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +33,11 @@
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}" />
+
 
         <activity
             android:name=".MainActivity"

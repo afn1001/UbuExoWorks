@@ -91,6 +91,18 @@
                 tools:layout_editor_absoluteY="32dp" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_ubicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ubicación" />
+
+        <Button
+            android:id="@+id/btn_eliminarFichaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar" />
+
 
     </LinearLayout>
 
