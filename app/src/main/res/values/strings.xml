@@ -1,15 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string-array name="idiomas">
+        <item>Selecciona idioma</item>
+        <item>Español (España)</item>
+        <item>Inglés (Reino Unido)</item>
+    </string-array>
+
+    <!--Strings de los datos del usuario -->
+    <string name="titulo_datos_usuario">Datos del usuario</string>
+    <string name="nombre">Nombre:</string>
+    <string name="apellidos">Apellidos:</string>
+
+    <!--Strings del menú de fragments -->
+    <string name="frag_fichar">Fichar</string>
+    <string name="frag_calendario">Calendario</string>
+    <string name="frag_dietas">Dietas</string>
+
+    <!--Strings del fichaje -->
+    <string name="fichar">Fichar</string>
+
+    <!--Strings del item de cada fichaje -->
+    <string name="fecha">Fecha:</string>
+    <string name="hora">Hora:</string>
+    <string name="latitud">Latitud:</string>
+    <string name="longitud">Longitud:</string>
+    <string name="ubicacion">Ubicación</string>
+    <string name="eliminar">Eliminar</string>
+
+    <!--Strings del login -->
     <string name="app_name">UbuExoWorks</string>
     <string name="olvida">¿Has olvidado tus datos de inicio de sesión?</string>
     <string name="ayuda">Obtén ayuda</string>
     <string name="entrada_sistema">Entrada al sistema</string>
     <string name="correo">Correo electrónico</string>
     <string name="contraseña">Contraseña</string>
-
-    <string-array name="idiomas">
-        <item>Español (España)</item>
-        <item>Inglés (Reino Unido)</item>
-    </string-array>
+    <string name="registrar">Registrar</string>
 
     <!--Strings de dialog para borrar el fichaje  -->
     <string name="pregunta">¿Estás seguro de que quieres eliminar este fichaje?</string>

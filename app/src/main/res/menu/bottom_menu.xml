@@ -3,19 +3,19 @@
 
     <item
         android:id="@+id/fichar"
-        android:title="Fichar"
+        android:title="@string/frag_fichar"
         android:icon="@drawable/googleg_disabled_color_18"
         />
 
     <item
         android:id="@+id/calendario"
-        android:title="Calendario"
+        android:title="@string/frag_calendario"
         android:icon="@drawable/calendar"
         />
 
     <item
         android:id="@+id/dietas"
-        android:title="Dietas"
+        android:title="@string/frag_dietas"
         android:icon="@drawable/googleg_disabled_color_18"
         />
 

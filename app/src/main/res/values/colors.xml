@@ -17,4 +17,9 @@
     <color name="colorFondoCuentaPago">#F1F1F1</color>
     <color name="colorBordeCuentaPago">#BFBFBF</color>
 
+    <!-- Colores para el círculo -->
+    <color name="colorPrimary">@color/purple_500</color>
+    <color name="colorPrimaryVariant">@color/purple_700</color>
+    <color name="colorPrimaryBackground">@color/purple_200</color>
+
 </resources>

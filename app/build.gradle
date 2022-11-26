@@ -73,8 +73,5 @@ dependencies {
     //Para mostrar la ubicación en el mapa
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-    //Para las notificaciones
-    implementation "androidx.core:core:1.6.0"
-
 
 }

@@ -6,7 +6,7 @@
 
     <!-- Color de fondo del recuadro -->
     <solid
-        android:color="@color/colorFondoCuentaPago">
+        android:color="@color/white">
     </solid>
 
     <!-- Borde del recuadro -->
@@ -16,7 +16,7 @@
     </stroke>
 
     <corners
-        android:radius="2dp"   >
+        android:radius="25dp"   >
     </corners>
 
 </shape>

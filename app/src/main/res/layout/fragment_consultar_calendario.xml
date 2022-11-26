@@ -1,69 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+
+    <CalendarView
+        android:id="@+id/cdvCalendario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
-
-        <CalendarView
-            android:id="@+id/cdvCalendario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+        android:layout_gravity="center"/>
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <ListView
+        android:id="@+id/lv_fichajes"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/borde_cuenta_pago"
+        android:layout_margin="10dp"
+        android:padding="10dp"/>
 
-            <TextView
-                android:id="@+id/txtEntrada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Entrada:"/>
+    <TextView
+        android:id="@+id/vacio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No hay fichajes"/>
 
-            <TextView
-                android:id="@+id/txtHoraEntrada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nada"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtSalida"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salida:"/>
-
-            <TextView
-                android:id="@+id/txtHoraSalida"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nada"/>
-
-
-                <ListView
-                    android:id="@+id/lv_fichajes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

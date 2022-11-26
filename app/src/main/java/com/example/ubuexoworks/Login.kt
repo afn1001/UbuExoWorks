@@ -1,7 +1,9 @@
 package com.example.ubuexoworks
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -18,6 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.*
 
 
 class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -30,22 +33,23 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var fallo: TextView
     private var jsonId: Int = 0
     private var jsonToken: String = ""
+    private lateinit var spinner: Spinner
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
-        val spinner: Spinner = findViewById(R.id.sp_idiomas)
+        spinner = findViewById(R.id.sp_idiomas)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(this, R.array.idiomas, android.R.layout.simple_spinner_item).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
 
         spinner.onItemSelectedListener = this;
+        spinner.setSelection(0)
 
         //Creamos el servicio
         service = createApiService()
@@ -217,11 +221,27 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
 
-        if(pos==0) {
+        if(pos==1) {
             //Toast.makeText(this, "Español",Toast.LENGTH_SHORT).show()
-        } else if (pos==1) {
-            Toast.makeText(this, "Inglés",Toast.LENGTH_SHORT).show()
+            setLocal(this, "es")
+            finish()
+            startActivity(intent)
+        } else if (pos==2) {
+            setLocal(this, "en")
+            finish()
+            startActivity(intent)
+
         }
+    }
+
+    fun setLocal(activity: Activity, langCode: String) {
+        var locale = Locale(langCode)
+        Locale.setDefault(locale)
+        var resources = activity.resources
+        var config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {

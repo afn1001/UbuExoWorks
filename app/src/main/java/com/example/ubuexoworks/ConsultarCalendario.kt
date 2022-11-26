@@ -27,11 +27,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ConsultarCalendario.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ConsultarCalendario : Fragment() {
 
     private lateinit var retrofit: Retrofit
@@ -55,8 +50,6 @@ class ConsultarCalendario : Fragment() {
         idUsuario = preferences.getInt("Id", 0)
         tokenUsuario = preferences.getString("Token","")
 
-        val txtEntrada = view.findViewById<TextView>(R.id.txtHoraEntrada)
-        val txtSalida = view.findViewById<TextView>(R.id.txtHoraSalida)
 
         //Creamos el servicio
         service = createApiService()
@@ -70,14 +63,8 @@ class ConsultarCalendario : Fragment() {
 
         val calendario = view.findViewById<CalendarView>(R.id.cdvCalendario)
         calendario.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            val mes = "" + month
-            val diaDelMes = "" + dayOfMonth
-            txtEntrada.setText(mes)
-            //txtSalida.setText(diaDelMes)
-
             //Obtenemos los fichajes del día que deseamos
             val estaFecha = LocalDate.of(year, month+1, dayOfMonth).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-            txtSalida.setText(estaFecha)
             obtenerFichajes(estaFecha)
         }
 
@@ -97,18 +84,15 @@ class ConsultarCalendario : Fragment() {
                     listFichajes = response.body()!!
 
                     Log.d("TAG", response.body().toString())
-                    try {
-                        val txtHora = requireActivity().findViewById<TextView>(R.id.txtHoraSalida)
-                        txtHora.setText(listFichajes[1].hora)
-                    } catch (e: Exception) {
-
-                    }
 
                     //Inicializamos el adaptador para la lista de fichajes
-                    val adapter = FichajeAdapter(requireContext(), listFichajes)
+                    val adapter = context?.let { FichajeAdapter(it, listFichajes) }
 
                     val lvFichajes = activity?.findViewById<ListView>(R.id.lv_fichajes)
                     lvFichajes?.adapter = adapter
+
+                    val tvVacio = activity?.findViewById<TextView>(R.id.vacio)
+                    lvFichajes?.emptyView = tvVacio
                 } else {
                     Toast.makeText(requireContext(), "Falla", Toast.LENGTH_SHORT).show()
                 }

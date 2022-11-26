@@ -1,10 +1,8 @@
 package com.example.ubuexoworks
 
 import android.Manifest
-import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.*
 import android.content.Context.MODE_PRIVATE
 import android.content.Context.NOTIFICATION_SERVICE
@@ -12,21 +10,19 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.getSystemServiceName
 import androidx.fragment.app.Fragment
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,16 +34,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Fichar.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Fichar : Fragment() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -58,6 +50,7 @@ class Fichar : Fragment() {
     private var idUsuario: Int = 0
     private var tokenUsuario: String? = ""
     private lateinit var builder: NotificationCompat.Builder
+    private lateinit var barTimer: ProgressBar
 
     //Timer
     lateinit var ayudaContador: AyudaContador
@@ -97,6 +90,7 @@ class Fichar : Fragment() {
             obtenerUbicación()
         }
 
+
         //Timer
         tvTiempo = view.findViewById(R.id.txt_tiempo)
         ayudaContador = AyudaContador(requireContext())
@@ -118,7 +112,8 @@ class Fichar : Fragment() {
             }
         }
 
-        timer.scheduleAtFixedRate(TimeTask(), 0, 500)
+        //El contador se modifica cada segundo
+        timer.scheduleAtFixedRate(TimeTask(), 0, 1000)
 
 
         //Builder para la notificación
@@ -131,6 +126,8 @@ class Fichar : Fragment() {
                 .bigText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
+
+        barTimer = view.findViewById(R.id.progress_bar)
 
         return view
 
@@ -229,6 +226,9 @@ class Fichar : Fragment() {
                 activity?.runOnUiThread({
                     val time = Date().time - ayudaContador.startTime()!!.time
                     tvTiempo.text = tiempoDeLongAString(time)
+
+                    //Se añade el progreso al progressbar cada segundo
+                    barTimer.setProgress(time.toInt()/1000);
                 })
             }
         }
@@ -239,6 +239,8 @@ class Fichar : Fragment() {
         ayudaContador.setTiempoIniciar(null)
         pararContador()
         tvTiempo.text = tiempoDeLongAString(0)
+
+        barTimer.setProgress(0);
     }
 
     private fun pararContador() {
@@ -276,7 +278,7 @@ class Fichar : Fragment() {
         val timer = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
 
-        if(timer.equals("00:00:05")) {
+        if(timer.equals("08:00:00")) {
             with(NotificationManagerCompat.from(requireContext())) {
                 // notificationId is a unique int for each notification that you must define
                 notify(123, builder.build())

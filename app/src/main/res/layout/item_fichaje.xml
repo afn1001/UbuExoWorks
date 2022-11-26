@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryBackground">
 
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:orientation="vertical">
+        android:id="@+id/tv_tipofichaje"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha:               "
+                android:text="@string/fecha"
                 tools:layout_editor_absoluteX="31dp"
                 tools:layout_editor_absoluteY="32dp" />
 
@@ -31,14 +36,16 @@
                 tools:layout_editor_absoluteY="32dp" />
          </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="end">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hora:                 "
+                android:text="@string/hora"
                 tools:layout_editor_absoluteX="31dp"
                 tools:layout_editor_absoluteY="32dp" />
 
@@ -50,35 +57,20 @@
                 tools:layout_editor_absoluteX="31dp"
                 tools:layout_editor_absoluteY="32dp" />
         </LinearLayout>
+    </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Longitud:          "
-                tools:layout_editor_absoluteX="31dp"
-                tools:layout_editor_absoluteY="32dp" />
-
-            <TextView
-                android:id="@+id/tv_longitud"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nada"
-                tools:layout_editor_absoluteX="31dp"
-                tools:layout_editor_absoluteY="32dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Latitud:             "
+                android:text="@string/latitud"
                 tools:layout_editor_absoluteX="31dp"
                 tools:layout_editor_absoluteY="32dp" />
 
@@ -91,21 +83,48 @@
                 tools:layout_editor_absoluteY="32dp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_ubicacion"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ubicación" />
+            android:orientation="horizontal"
+            android:layout_gravity="end">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/longitud"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
 
-        <Button
-            android:id="@+id/btn_eliminarFichaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Eliminar" />
+            <TextView
+                android:id="@+id/tv_longitud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nada"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="32dp" />
+        </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+        <ImageView
+            android:id="@+id/iw_ubicacion"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/common_google_signin_btn_icon_dark"/>
 
+        <ImageView
+            android:id="@+id/iw_eliminarFichaje"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/googleg_disabled_color_18"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
     </LinearLayout>
 
 
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>

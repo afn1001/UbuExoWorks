@@ -1,12 +1,15 @@
 package com.example.ubuexoworks
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
@@ -37,17 +40,27 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
         val tvHora: TextView = view.findViewById(R.id.tv_hora)
         tvHora.setText(fichaje.hora)
 
+        val tvTipoFichaje: TextView = view.findViewById(R.id.tv_tipofichaje)
+        if(esPar(position)) {
+            tvTipoFichaje.setText("Fichaje de entrada")
+        } else {
+            tvTipoFichaje.setText("Fichaje de salida")
+            view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+        }
+
         val tvLongitud: TextView = view.findViewById(R.id.tv_longitud)
         tvLongitud.setText(fichaje.longitud.toString())
 
         val tvLatitud: TextView = view.findViewById(R.id.tv_latitud)
         tvLatitud.setText(fichaje.latitud.toString())
 
-        //Le pasamos la latitud y la longitud al dialog con el map
-        val btnUbicacion: Button = view.findViewById(R.id.btn_ubicacion)
-        btnUbicacion.setOnClickListener {
+        //Se pasa la latitud y la longitud al dialog con el map
+        val iwUbicacion: ImageView = view.findViewById(R.id.iw_ubicacion)
+        iwUbicacion.setOnClickListener {
+            //Se pasa la ubicación al mapa para que pueda crear el marcador
             val sp = mContext.getSharedPreferences("Ubicacion", Context.MODE_PRIVATE)
             val ed = sp.edit()
+            ed.putString("Hora", fichaje.hora)
             ed.putFloat("Longitud", fichaje.longitud)
             ed.putFloat("Latitud", fichaje.latitud)
             ed.commit()
@@ -57,8 +70,8 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
             MyCustomDialog().show(fragmentManager, "UbicacionFragment")
         }
 
-        val btnEliminarFichaje: Button = view.findViewById(R.id.btn_eliminarFichaje)
-        btnEliminarFichaje.setOnClickListener {
+        val iwEliminarFichaje: ImageView = view.findViewById(R.id.iw_eliminarFichaje)
+        iwEliminarFichaje.setOnClickListener {
             val sp = mContext.getSharedPreferences("FichajeAEliminar", Context.MODE_PRIVATE)
             val ed = sp.edit()
             ed.putInt("IDFichaje", fichaje.ID)
@@ -70,5 +83,12 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
         }
 
         return view
+    }
+
+    fun esPar(num: Int):Boolean {
+        if (num % 2 == 0)
+            return true
+        else
+            return false
     }
 }
