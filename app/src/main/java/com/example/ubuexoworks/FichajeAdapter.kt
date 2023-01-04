@@ -10,12 +10,16 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
 import com.example.ubuexoworks.Dialogs.BorrarFichajeDialog
 
-
+/**
+ * Clase que sirve como adaptador para poder devolver la lista con todos los fichajes
+ * @author Alejandro Fraga Neila
+ */
 class FichajeAdapter(private val mContext : Context, private val listaFichajes : ArrayList<FichajeObtenido>) : BaseAdapter() {
     override fun getCount(): Int {
         return listaFichajes.size
@@ -43,9 +47,10 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
         val tvTipoFichaje: TextView = view.findViewById(R.id.tv_tipofichaje)
         if(esPar(position)) {
             tvTipoFichaje.setText("Fichaje de entrada")
+            view.setBackgroundResource(R.drawable.borde_fichaje_entrada)
         } else {
             tvTipoFichaje.setText("Fichaje de salida")
-            view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            view.setBackgroundResource(R.drawable.borde_fichaje_salida)
         }
 
         val tvLongitud: TextView = view.findViewById(R.id.tv_longitud)
@@ -70,6 +75,7 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
             MyCustomDialog().show(fragmentManager, "UbicacionFragment")
         }
 
+
         val iwEliminarFichaje: ImageView = view.findViewById(R.id.iw_eliminarFichaje)
         iwEliminarFichaje.setOnClickListener {
             val sp = mContext.getSharedPreferences("FichajeAEliminar", Context.MODE_PRIVATE)
@@ -82,9 +88,17 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
             BorrarFichajeDialog().show(fragmentManager, "EliminarFichajeFragment")
         }
 
+        if(fichaje.incidencia != null) {
+
+        }
+
         return view
     }
 
+    /**
+     * Comprueba si el fichaje es par o impar
+     * @param num El número que se quiere comprobar
+     */
     fun esPar(num: Int):Boolean {
         if (num % 2 == 0)
             return true

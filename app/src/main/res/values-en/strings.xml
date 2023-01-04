@@ -20,12 +20,13 @@
 
     <!--Strings del fichaje -->
     <string name="fichar">Record</string>
+    <string name="esperar">You must wait at least 5 minutes until making the next record</string>
 
     <!--Strings del item de cada fichaje -->
-    <string name="fecha">Date:</string>
-    <string name="hora">Time:</string>
-    <string name="latitud">Latitude:</string>
-    <string name="longitud">Longitude:</string>
+    <string name="fecha">Date: </string>
+    <string name="hora">Time: </string>
+    <string name="latitud">Latitude: </string>
+    <string name="longitud">Longitude: </string>
     <string name="ubicacion">Location</string>
     <string name="eliminar">Delete</string>
 
@@ -42,4 +43,14 @@
     <string name="pregunta">Are you sure you want to delete this signing?</string>
     <string name="aceptar">Yes</string>
     <string name="rechazar">No</string>
+
+    <!--Strings para obtener los fichajes con el calendario-->
+    <string name="vacio">There are no records</string>
+
+    <!--Strings de las dietas -->
+    <string name="dni">ID: </string>
+    <string name="iva">TAX: </string>
+    <string name="total">Total: </string>
+    <string name="reconocer_texto">Recognize text</string>
+
 </resources>

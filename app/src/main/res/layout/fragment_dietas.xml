@@ -12,7 +12,6 @@
         android:layout_gravity="end"
         android:paddingBottom="30dp"
         android:src="@android:drawable/ic_input_add"
-        android:contentDescription="Escanear ticket"
         android:layout_margin="16dp" />
 
     <LinearLayout
@@ -40,49 +39,80 @@
             android:layout_marginTop="30dp"
             android:text="TextView" />
 
-        <TextView
-            android:id="@+id/text_dni"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="TextView" />
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/dni" />
+            <EditText
+                android:id="@+id/et_dni"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:maxLength="9"/>
 
-        <TextView
-            android:id="@+id/text_tax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="TextView" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/text_total"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="TextView" />
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/iva" />
+
+                <EditText
+                    android:id="@+id/et_tax"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="7"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/total" />
+
+            <EditText
+                android:id="@+id/et_preciototal"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:maxLength="7"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_reconocerTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="@string/reconocer_texto"
+            />
+
+        <Button
+            android:id="@+id/btn_enviarGasto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="Enviar gasto"
+            />
 
 
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_enviarGasto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="150dp"
-        android:text="Enviar gasto" />
 
-    <Button
-        android:id="@+id/btn_reconocerTexto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:text="Start recognition"
-        android:layout_marginBottom="60dp"
-        />
+
 
 </FrameLayout>

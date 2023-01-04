@@ -1,7 +1,10 @@
 package com.example.ubuexoworks
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentTransaction
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.example.ubuexoworks.ClasesDeDatos.Usuario
@@ -23,6 +27,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
+/**
+ * Clase donde se puede realizar todas las funciones de usuario
+ * Permite moverse entre las pestañas "Fichar", "Calendario" y "Dietas" y ver los datos de usuario
+ * @author Alejandro Fraga Neila
+ */
 class MainActivity : AppCompatActivity() {
     //Create our four fragments object
     lateinit var consultarCalendario: ConsultarCalendario
@@ -41,8 +50,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //Sliding panel
         val layout: SlidingUpPanelLayout = findViewById(R.id.slidingDown)
-        layout.addPanelSlideListener(object: SlidingPaneLayout.PanelSlideListener{
+        layout.addPanelSlideListener(object: SlidingPaneLayout.PanelSlideListener,
+            SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View, slideOffset: Float) {
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                TODO("Not yet implemented")
             }
 
             override fun onPanelOpened(panel: View) {
@@ -116,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun obtenerDatosUsuario() {
+        comprobarConexion(applicationContext)
         val call: Call<String> = service.getDatosUsuario("Bearer " + tokenUsuario, idUsuario)
 
         call.enqueue(object : Callback<String> {
@@ -152,7 +171,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun createApiService() : ApiService {
+    fun createApiService() : ApiService {
         retrofit = Retrofit.Builder()
             .baseUrl("https://miubuapp.herokuapp.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -160,9 +179,21 @@ class MainActivity : AppCompatActivity() {
             .build()
         return retrofit.create(ApiService::class.java)
     }
+
+    @SuppressLint("MissingPermission")
+    fun comprobarConexion(context: Context) {
+        val gestorConexion = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capacidadesDeRed = gestorConexion.activeNetwork
+        val infromacionDeRed = gestorConexion.getNetworkCapabilities(capacidadesDeRed)
+        if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
+        } else {
+            Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show()
+        }
+    }
 }
 
-private fun SlidingUpPanelLayout.addPanelSlideListener(panelSlideListener: SlidingPaneLayout.PanelSlideListener) {
 
-}
+
+
 

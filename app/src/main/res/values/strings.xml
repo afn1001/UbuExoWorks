@@ -19,12 +19,13 @@
 
     <!--Strings del fichaje -->
     <string name="fichar">Fichar</string>
+    <string name="esperar">Debes esperar al menos 5 minutos hasta realizar el siguiente fichaje</string>
 
     <!--Strings del item de cada fichaje -->
-    <string name="fecha">Fecha:</string>
-    <string name="hora">Hora:</string>
-    <string name="latitud">Latitud:</string>
-    <string name="longitud">Longitud:</string>
+    <string name="fecha">Fecha: </string>
+    <string name="hora">Hora: </string>
+    <string name="latitud">Latitud: </string>
+    <string name="longitud">Longitud: </string>
     <string name="ubicacion">Ubicación</string>
     <string name="eliminar">Eliminar</string>
 
@@ -37,9 +38,18 @@
     <string name="contraseña">Contraseña</string>
     <string name="registrar">Registrar</string>
 
-    <!--Strings de dialog para borrar el fichaje  -->
+    <!--Strings de dialog para borrar el fichaje -->
     <string name="pregunta">¿Estás seguro de que quieres eliminar este fichaje?</string>
     <string name="aceptar">Sí</string>
     <string name="rechazar">No</string>
+
+    <!--Strings para obtener los fichajes con el calendario-->
+    <string name="vacio">No hay fichajes</string>
+
+    <!--Strings de las dietas -->
+    <string name="dni">DNI: </string>
+    <string name="iva">IVA: </string>
+    <string name="total">Total: </string>
+    <string name="reconocer_texto">Reconocer texto</string>
 
 </resources>

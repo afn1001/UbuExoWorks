@@ -1,95 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="100dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingTop="100dp"
-        android:background="#ffffff">
+        android:weightSum="1">
 
-        <ImageView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:layout_gravity="center"/>
 
-        <LinearLayout
-            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp">
+            <TextView
+                android:id="@+id/txt_recordatorio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="Introduce el correo electrónico \n asociado a tu cuenta."
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_correoRecuperacionLayout"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_correoRecuperacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/correo"
+                android:background="@drawable/edit_text_bg"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/txt_falloCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorFallo"
+            android:layout_marginBottom="15dp"
+            android:textSize="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_enviarCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar"
+            android:onClick="cambiarClave"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/edit_text_bg"/>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:weightSum="1">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="center"
-                android:layout_marginBottom="40dp">
-                <TextView
-                    android:id="@+id/txt_recordatorio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:text="Introduce el correo electrónico \n asociado a tu cuenta."
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/et_correoRecuperacionLayout"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_correoRecuperacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/correo"
-                    android:background="@drawable/edit_text_bg"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
+            android:onClick="irALogin">
             <TextView
-                android:id="@+id/txt_falloCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorFallo"
-                android:layout_marginBottom="15dp"
-                android:textSize="12dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_enviarCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Enviar"
-                android:onClick="cambiarClave"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/edit_text_bg"/>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="center"
-                android:onClick="irALogin">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/entrada_sistema"
-                    android:textColor="@color/design_default_color_primary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
+                android:text="@string/entrada_sistema"
+                android:textColor="@color/design_default_color_primary"/>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -1,9 +1,12 @@
 package com.example.ubuexoworks
 
+
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -22,7 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.*
 
-
+/**
+ * Clase que permite realizar el inicio de sesión, registrar dispositivo, cambiar idioma e ir a recuperar la contraseña
+ * @author Alejandro Fraga Neila
+ */
 class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var retrofit: Retrofit
@@ -37,14 +43,18 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        //Quitamos el SplashScreen
+        Thread.sleep(1000)
+        setTheme(R.style.Theme_AppCompat_SplashScreen)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
         spinner = findViewById(R.id.sp_idiomas)
-        // Create an ArrayAdapter using the string array and a default spinner layout
+        // Se crea un ArrayAdapter usando el array de strings con el idioma y el layout de un spinner simple
         ArrayAdapter.createFromResource(this, R.array.idiomas, android.R.layout.simple_spinner_item).also { adapter ->
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
+            // Se aplica el adaptador al spinner
             spinner.adapter = adapter
         }
 
@@ -58,8 +68,8 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val emailInput = findViewById<EditText>(R.id.et_correo)
         val passwordInput = findViewById<EditText>(R.id.et_contraseña)
 
-        myImei = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-        //Toast.makeText(this, myImei, Toast.LENGTH_SHORT).show()
+        myImei=Settings.Secure.getString(getContentResolver(),
+            Settings.Secure.ANDROID_ID)
 
         val loginButton = findViewById<Button>(R.id.btn_login)
         loginButton.setOnClickListener {
@@ -67,7 +77,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             password = passwordInput.text.toString().trim()
             if(email.isNotEmpty()) {
                 if(password.isNotEmpty()) {
-                    executeLogin(email, password, "121212")
+                    ejecutarLogin(email, password, myImei)
                 } else {
                     Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
                 }
@@ -92,56 +102,11 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         }
 
-        //Animaciones
-        /*
-        val emailLayout = findViewById<TextInputLayout>(R.id.et_correoLayout)
-        emailLayout.translationX = 1000f
-        emailLayout.alpha = 0f
-        emailLayout.animate().apply {
-            duration = 1000
-            startDelay = 300
-            translationX(0f)
-            alpha(1f)
-
-        }.start()
-
-        val passwordLayout = findViewById<TextInputLayout>(R.id.et_contraseñaLayout)
-        passwordLayout.translationX = 1000f
-        passwordLayout.alpha = 0f
-        passwordLayout.animate().apply {
-            duration = 1000
-            startDelay = 500
-            translationX(0f)
-            alpha(1f)
-
-        }.start()
-
-        loginButton.translationX = 1000f
-        loginButton.alpha = 0f
-        loginButton.animate().apply {
-            duration = 1000
-            startDelay = 700
-            translationX(0f)
-            alpha(1f)
-
-        }.start()
-
-        val recuperarClave = findViewById<TextInputLayout>(R.id.til_recuperar_clave)
-        recuperarClave.translationX = 1000f
-        recuperarClave.alpha = 0f
-        recuperarClave.animate().apply {
-            duration = 1000
-            startDelay = 700
-            translationX(0f)
-            alpha(1f)
-
-        }.start()
-
-         */
 
     }
 
-    private fun executeLogin(email: String, password: String, imei: String) {
+    private fun ejecutarLogin(email: String, password: String, imei: String) {
+        comprobarConexion(applicationContext)
         val credenciales = Credenciales(email, password, imei)
         val call = service.login(credenciales)
 
@@ -180,6 +145,13 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    /**
+     * Registra un dispositivo para que solo se pueda hacer login con un email y una contraseña únicos
+     * @param email Correo electrónico de un usuario ya registrado
+     * @param password Contraseña de un usuario ya registrado
+     * @param imei Número identificativo de este dispositivo
+     * @exception e Devuelve una excepción si el dispositivo ya está registrado
+     */
     private fun registrarDispositivo(email: String, password: String, imei: String) {
         val credenciales = Credenciales(email, password, imei)
         val call = service.registraDispositivo(credenciales)
@@ -193,7 +165,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                     } catch (e: Exception) {
                         Log.d("registroDispositivo", e.toString())
-                        Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Login, "Dispositivo registrado", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
@@ -207,7 +179,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
-    private fun createApiService() : ApiService {
+    fun createApiService() : ApiService {
         retrofit = Retrofit.Builder()
             .baseUrl("https://miubuapp.herokuapp.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -216,25 +188,26 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         return retrofit.create(ApiService::class.java)
     }
 
-
+    /**
+     * Permite seleccionar el idioma
+     */
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-
         if(pos==1) {
-            //Toast.makeText(this, "Español",Toast.LENGTH_SHORT).show()
-            setLocal(this, "es")
+            cambiarIdioma(this, "es")
             finish()
             startActivity(intent)
         } else if (pos==2) {
-            setLocal(this, "en")
+            cambiarIdioma(this, "en")
             finish()
             startActivity(intent)
 
         }
     }
 
-    fun setLocal(activity: Activity, langCode: String) {
+    /**
+     * Permite cambiar el idioma
+     */
+    fun cambiarIdioma(activity: Activity, langCode: String) {
         var locale = Locale(langCode)
         Locale.setDefault(locale)
         var resources = activity.resources
@@ -247,15 +220,37 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>) {
     }
 
+    /**
+     * Accede a la actividad para recuperar la contraseña
+     */
     fun irARecordarClave(view: View) {
         val intent = Intent(this, RecordarClave::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        finish()
     }
 
+    /**
+     * Accede a la actividad Main una vez se realiza el login
+     */
     fun irAMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    /**
+     * Comprueba si el dispositivo dispone de conexión a internet
+     */
+    @SuppressLint("MissingPermission")
+    fun comprobarConexion(context: Context) {
+        val gestorConexion = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capacidadesDeRed = gestorConexion.activeNetwork
+        val infromacionDeRed = gestorConexion.getNetworkCapabilities(capacidadesDeRed)
+        if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
+        } else {
+            Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show()
+        }
     }
 
 }

@@ -2,6 +2,10 @@ package com.example.ubuexoworks.ClasesDeDatos
 
 import java.io.File
 
+/**
+ * Clase con los datos del ticket que queremos enviar
+ * @author Alejandro Fraga Neila
+ */
 data class Gasto(
     val ticket: File?,
     val idUsuario: String,

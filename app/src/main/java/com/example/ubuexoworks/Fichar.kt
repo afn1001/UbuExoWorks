@@ -1,6 +1,7 @@
 package com.example.ubuexoworks
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.*
@@ -8,6 +9,8 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -23,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -39,11 +43,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-
+/**
+ * Clase que permite realizar el fichaje en la pestaña "Fichaje"
+ * @author Alejandro Fraga Neila
+ */
 class Fichar : Fragment() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var retrofit: Retrofit
     private lateinit var service: ApiService
     private var longitud: String = ""
     private var latitud: String = ""
@@ -61,46 +67,31 @@ class Fichar : Fragment() {
     //Id de la notificación
     private val ID_CANAL = "canal01"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_fichar, container, false)
-        val idView : TextView = view.findViewById(R.id.txt_idUsuario)
 
         //Se obtienen los datos del id de usuario
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", MODE_PRIVATE)
         idUsuario = preferences.getInt("Id", 0)
-        idView.setText(idUsuario.toString())
 
         //Se obtiene el token para poder realizar llamadas a la Api con seguridad
         tokenUsuario = preferences.getString("Token","")
 
         //Creamos el servicio
-        service = createApiService()
+        service = (activity as MainActivity).createApiService()
+
+        //Servicio para la ubicación
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         //Botón para fichar
         view.findViewById<Button>(R.id.btn_fichar).setOnClickListener {
             obtenerUbicación()
         }
 
-
         //Timer
         tvTiempo = view.findViewById(R.id.txt_tiempo)
         ayudaContador = AyudaContador(requireContext())
-        view.findViewById<Button>(R.id.btn_start).setOnClickListener {
-            iniciarPararContador()
-        }
-
-        view.findViewById<Button>(R.id.btn_reset).setOnClickListener {
-            resetAction()
-        }
 
         if(ayudaContador.estaContando()) {
             iniciarContador()
@@ -129,6 +120,7 @@ class Fichar : Fragment() {
 
         barTimer = view.findViewById(R.id.progress_bar)
 
+
         return view
 
     }
@@ -150,6 +142,7 @@ class Fichar : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fichar() {
+        context?.let { (activity as MainActivity)?.comprobarConexion(it) }
         val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
         val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
@@ -163,16 +156,17 @@ class Fichar : Fragment() {
                         val jsonUser = JSONObject(response.body()!!)
                         val token = jsonUser.optString("token")
 
-
-                        if(token.equals("OK")) {
-                            Toast.makeText(context, "Funciona", Toast.LENGTH_SHORT).show()
+                        //Si el fichaje es correcto nos devuelve un mensaje de confirmación y el contador comienza o se para
+                        if(token.equals("Ok")) {
+                            iniciarPararContador()
+                            Toast.makeText(context, "Fichaje realizado", Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
                         Log.d("fichar", e.toString())
                         Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Falla", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.esperar, Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -183,15 +177,7 @@ class Fichar : Fragment() {
         })
     }
 
-    private fun createApiService() : ApiService {
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://miubuapp.herokuapp.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(ApiService::class.java)
-    }
-
+    @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerUbicación() {
 
@@ -206,12 +192,6 @@ class Fichar : Fragment() {
                 //Se obtiene la latitud y la longitud
                 latitud = location.latitude.toString()
                 longitud = location.longitude.toString()
-
-                val txtFecha = requireActivity().findViewById<TextView>(R.id.txt_fecha)
-                txtFecha.setText(latitud)
-
-                val txtHora = requireActivity().findViewById<TextView>(R.id.txt_hora)
-                txtHora.setText(longitud)
 
                 fichar()
             }
@@ -255,6 +235,7 @@ class Fichar : Fragment() {
         if(ayudaContador.estaContando()) {
             ayudaContador.setTiempoParar(Date())
             pararContador()
+            resetAction()
         } else {
             if(ayudaContador.pararTiempo() != null) {
                 ayudaContador.setTiempoIniciar(calcTiempoReinicio())
@@ -287,5 +268,7 @@ class Fichar : Fragment() {
 
         return timer
     }
+
+
 }
 

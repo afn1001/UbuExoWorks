@@ -1,5 +1,9 @@
 package com.example.ubuexoworks.ClasesDeDatos
 
+/**
+ * Clase con los datos de los fichajes realizados que queremos obtener del calendario
+ * @author Alejandro Fraga Neila
+ */
 data class FichajeObtenido(
     val ID: Int,
     val borrado: Boolean,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_500">#a9bbe1</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
@@ -14,12 +14,16 @@
     <color name="colorTexto">#111111</color>
     <color name="colorFallo">#fb414c</color>
 
-    <color name="colorFondoCuentaPago">#F1F1F1</color>
-    <color name="colorBordeCuentaPago">#BFBFBF</color>
+    <color name="colorBordeFichajes">#BFBFBF</color>
 
     <!-- Colores para el círculo -->
-    <color name="colorPrimary">@color/purple_500</color>
-    <color name="colorPrimaryVariant">@color/purple_700</color>
-    <color name="colorPrimaryBackground">@color/purple_200</color>
+    <color name="colorPrimary">#a9bbe1</color>
+    <color name="colorPrimaryVariant">#a9bbe1</color>
+    <color name="colorPrimaryBackground">#D6B5FF</color>
+
+
+
+    <color name="colorFondoFichajeEntrada">#D6B5FF</color>
+    <color name="colorFondoFichajeSalida">#EDDEFF</color>
 
 </resources>

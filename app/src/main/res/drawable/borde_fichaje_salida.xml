@@ -6,13 +6,13 @@
 
     <!-- Color de fondo del recuadro -->
     <solid
-        android:color="@color/white">
+        android:color="@color/colorFondoFichajeSalida">
     </solid>
 
     <!-- Borde del recuadro -->
     <stroke
         android:width="1dp"
-        android:color="@color/colorBordeCuentaPago" >
+        android:color="@color/colorBordeFichajes" >
     </stroke>
 
     <corners

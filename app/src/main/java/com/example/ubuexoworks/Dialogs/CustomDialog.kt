@@ -23,7 +23,10 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 
-
+/**
+ * Clase para mostrar el mapa con la ubicación del fichaje que se quiera
+ * @author Alejandro Fraga Neila
+ */
 class MyCustomDialog: DialogFragment(), OnMapReadyCallback {
 
     private var hora: String = "00:00:00"

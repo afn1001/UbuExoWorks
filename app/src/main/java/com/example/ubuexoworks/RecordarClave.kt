@@ -24,7 +24,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
+/**
+ * Clase que permite recuperar la contraseña
+ * @author Alejandro Fraga Neila
+ */
 class RecordarClave : AppCompatActivity() {
 
     private lateinit var retrofit: Retrofit
@@ -55,13 +60,21 @@ class RecordarClave : AppCompatActivity() {
         }
     }
 
-    fun irALogin() {
+    /**
+     * Permite acceder de vuelta a la pantalla principal de login
+     */
+    fun irALogin(view: View) {
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 
+    /**
+     * Se envía un correo a un usuario que ha olvidado la contraseña
+     * @param email Correo de un usuario registrado
+     * @exception e Devuelve excepción si el correo no está registrado
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun recuperarContraseña(email: String) {
         val call = service.recuperaContraseña(email)
@@ -74,8 +87,8 @@ class RecordarClave : AppCompatActivity() {
                         val token = jsonUser.optString("token")
 
 
-                        if(token.equals("OK")) {
-                            Toast.makeText(applicationContext, "Funciona", Toast.LENGTH_SHORT).show()
+                        if(token.equals("Ok")) {
+                            Toast.makeText(applicationContext, "Se ha enviado un mensaje con la nueva contraseña", Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
                         Log.d("fichar", e.toString())

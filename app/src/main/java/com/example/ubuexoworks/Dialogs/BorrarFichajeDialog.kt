@@ -12,21 +12,20 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.example.ubuexoworks.ApiService
-import com.example.ubuexoworks.ClasesDeDatos.Fichaje
 import com.example.ubuexoworks.ClasesDeDatos.FichajeEliminar
+import com.example.ubuexoworks.MainActivity
 import com.example.ubuexoworks.R
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
+/**
+ * Clase que sirve para confirmar si queremos realizar la petición de borrado de un fichaje
+ * y si la respuesta es "Sí" enviar un correo electrónico al administrador
+ * @author Alejandro Fraga Neila
+ */
 class BorrarFichajeDialog : DialogFragment() {
-    private lateinit var retrofit: Retrofit
     private lateinit var service: ApiService
 
     private var idUsuario: Int = 0
@@ -36,7 +35,7 @@ class BorrarFichajeDialog : DialogFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         //Creamos el servicio
-        service = createApiService()
+        service = (activity as MainActivity).createApiService()
 
         //Obtenemos el token de usuario, el idUsuario y el idFichaje
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE)
@@ -67,6 +66,8 @@ class BorrarFichajeDialog : DialogFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun solicitudBorrado(idUsuario: Int, idFichaje: Int) {
+        //Se comprueba la conexión a internet
+        context?.let { (activity as MainActivity)?.comprobarConexion(it) }
         val fichajeEliminar = FichajeEliminar(idUsuario, idFichaje)
         val call = service.solicitudBorrado("Bearer " + tokenUsuario, fichajeEliminar)
 
@@ -92,14 +93,5 @@ class BorrarFichajeDialog : DialogFragment() {
                 Log.d("fichar", t.toString())
             }
         })
-    }
-
-    private fun createApiService() : ApiService {
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://miubuapp.herokuapp.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(ApiService::class.java)
     }
 }

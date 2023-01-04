@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
-
-<LinearLayout
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:paddingTop="10dp"
-    >
+    android:orientation="vertical"
+    tools:context=".Login">
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/sp_idiomas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="90dp"
         android:minHeight="48dp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="40dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:background="@drawable/ubuexoworks_logo"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -108,7 +104,7 @@
                 android:text="@string/registrar"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/edit_text_bg"/>
+                android:background="@drawable/edit_text_bg" />
         </LinearLayout>
 
 
@@ -130,14 +126,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/ayuda"
-                android:textColor="@color/design_default_color_primary"/>
+                android:textColor="@color/colorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
     </LinearLayout>
 
 </LinearLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>

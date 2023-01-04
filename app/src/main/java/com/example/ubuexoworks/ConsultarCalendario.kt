@@ -5,17 +5,13 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
-import com.google.android.gms.location.FusedLocationProviderClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,19 +22,17 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
+/**
+ * Clase que permite trabajar con todos los fichajes realizados. Se pueden obtener los fichajes
+ * de cada día, mirar la información en el mapa y solicitar eliminarlos
+ * @author Alejandro Fraga Neila
+ */
 class ConsultarCalendario : Fragment() {
 
-    private lateinit var retrofit: Retrofit
     private lateinit var service: ApiService
     private var idUsuario: Int = 0
     lateinit var listFichajes: ArrayList<FichajeObtenido>
     private var tokenUsuario: String? = ""
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,7 +46,7 @@ class ConsultarCalendario : Fragment() {
 
 
         //Creamos el servicio
-        service = createApiService()
+        service = (activity as MainActivity).createApiService()
 
         //Lista con todos los fichajes
         listFichajes = ArrayList()
@@ -75,6 +69,7 @@ class ConsultarCalendario : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerFichajes(fecha: String) {
+        context?.let { (activity as MainActivity)?.comprobarConexion(it) }
         val call: Call<ArrayList<FichajeObtenido>> = service.getFichaje("Bearer " + tokenUsuario, idUsuario, fecha)
 
         call.enqueue(object : Callback<ArrayList<FichajeObtenido>> {
@@ -90,9 +85,15 @@ class ConsultarCalendario : Fragment() {
 
                     val lvFichajes = activity?.findViewById<ListView>(R.id.lv_fichajes)
                     lvFichajes?.adapter = adapter
-
                     val tvVacio = activity?.findViewById<TextView>(R.id.vacio)
                     lvFichajes?.emptyView = tvVacio
+
+                    val progressBar = activity?.findViewById<ProgressBar>(R.id.progress_bar)
+                    //Desaparece la progressbar para dar lugar al resultado
+                    progressBar?.visibility=View.INVISIBLE
+                    lvFichajes?.visibility=View.VISIBLE
+
+
                 } else {
                     Toast.makeText(requireContext(), "Falla", Toast.LENGTH_SHORT).show()
                 }
@@ -103,14 +104,5 @@ class ConsultarCalendario : Fragment() {
                 Log.d("fichar", t.toString())
             }
         })
-    }
-
-    private fun createApiService() : ApiService {
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://miubuapp.herokuapp.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(ApiService::class.java)
     }
 }
