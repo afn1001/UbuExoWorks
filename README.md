@@ -18,17 +18,17 @@ UbuExoWorks móvil es una aplicación para la gestión rápida de fichajes de lo
 empleados en una empresa y de el envío de los tickets de dietas con sus respectivos datos internos.
 
 Características:
-- Hacer login con un usuario específico
-- Registrar dispositivo para poder usarlo con las credenciales
-- Recuperar contraseña
-- Ver datos personales
-- Fichar
-- Ver fichajes en el calendario
-- Ver localización de cada fichaje
-- Solicitar borrado de fichaje
-- Sacar fotografía de un ticket
-- Obtener el total y el IVA del ticket automáticamente
-- Añadir datos del ticket y enviar el gasto al administrado
+ -   Hacer login con un usuario específico
+ -   Registrar dispositivo para poder usarlo con las credenciales
+ -   Recuperar contraseña
+ -   Ver datos personales
+ -   Fichar
+ -   Ver fichajes en el calendario
+ -   Ver localización de cada fichaje
+ -   Solicitar borrado de fichaje
+ -   Sacar fotografía de un ticket
+ -   Obtener el total y el IVA del ticket automáticamente
+ -   Añadir datos del ticket y enviar el gasto al administrado
 
 **Lenguajes disponibles**: español e inglés
 
