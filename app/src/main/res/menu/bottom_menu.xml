@@ -4,7 +4,7 @@
     <item
         android:id="@+id/fichar"
         android:title="@string/frag_fichar"
-        android:icon="@drawable/googleg_disabled_color_18"
+        android:icon="@drawable/fichar"
         />
 
     <item
@@ -16,7 +16,7 @@
     <item
         android:id="@+id/dietas"
         android:title="@string/frag_dietas"
-        android:icon="@drawable/googleg_disabled_color_18"
+        android:icon="@drawable/gasto"
         />
 
 </menu>

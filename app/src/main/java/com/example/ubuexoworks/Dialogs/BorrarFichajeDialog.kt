@@ -11,8 +11,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ApiService
 import com.example.ubuexoworks.ClasesDeDatos.FichajeEliminar
+import com.example.ubuexoworks.ConsultarCalendario
 import com.example.ubuexoworks.MainActivity
 import com.example.ubuexoworks.R
 import retrofit2.Call
@@ -59,9 +61,8 @@ class BorrarFichajeDialog : DialogFragment() {
                     DialogInterface.OnClickListener { dialog, id ->
                         // Se cancela el dialog
                     })
-            // Create the AlertDialog object and return it
             builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        } ?: throw IllegalStateException("La actividad no puede ser nula")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,15 +77,25 @@ class BorrarFichajeDialog : DialogFragment() {
                 Log.d("respuesta", response.toString());
                 if(response.isSuccessful && response.body() != null) {
                     try {
-                        if(response.body().equals("Ok")) {
-                            Toast.makeText(context, "Se ha solicitado eliminar el fichaje con éxito", Toast.LENGTH_SHORT).show()
-                        }
+                        AwesomeDialog.build(requireActivity())
+                            .title("Solicitud de borrado")
+                            .body("La solicitud de borrado ha sido enviada con éxito")
+                            .icon(R.drawable.ic_funciona)
+                            .onPositive("Aceptar") {
+                                Log.d("TAG", "positive ")
+                            }
+
                     } catch (e: Exception) {
                         Log.d("solicitudBorrado", e.toString())
-                        Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    //Toast.makeText(context, "Falla", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(requireActivity())
+                        .title("Solicitud de borrado fallida")
+                        .body("La solicitud de borrado no ha podido ser enviada")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("TAG", "positive ")
+                        }
                 }
             }
 

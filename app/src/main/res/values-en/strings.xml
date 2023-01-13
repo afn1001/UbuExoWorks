@@ -11,6 +11,11 @@
     <string name="titulo_datos_usuario">User data</string>
     <string name="nombre">Name:</string>
     <string name="apellidos">Surnames:</string>
+    <string name="jornadaLaboral">Workday:</string>
+    <string name="correoElectronico">Email:</string>
+    <string name="empresa">Company:</string>
+    <string name="rol">Role:</string>
+    <string name="horas">hours</string>
 
     <!--Strings del menú de fragments -->
     <string name="frag_fichar">Record</string>
@@ -23,6 +28,8 @@
     <string name="esperar">You must wait at least 5 minutes until making the next record</string>
 
     <!--Strings del item de cada fichaje -->
+    <string name="fichaje_entrada">Entry record</string>
+    <string name="fichaje_salida">Departure record</string>
     <string name="fecha">Date: </string>
     <string name="hora">Time: </string>
     <string name="latitud">Latitude: </string>
@@ -51,6 +58,15 @@
     <string name="dni">ID: </string>
     <string name="iva">TAX: </string>
     <string name="total">Total: </string>
+    <string name="razonSocial">Business name:</string>
+    <string name="tipoTicket">Type:</string>
+    <string name="descripcion">Description:</string>
+    <string name="numeroTicket">Ticket number:</string>
     <string name="reconocer_texto">Recognize text</string>
+    <string name="enviar_gasto">Send allowance</string>
+
+    <!-- Strings de recuperar contraseña -->
+    <string name="introduce_correo">Enter the email associated \n with your account.</string>
+    <string name="enviar">Send</string>
 
 </resources>

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentTransaction
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Usuario
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -50,28 +51,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //Sliding panel
         val layout: SlidingUpPanelLayout = findViewById(R.id.slidingDown)
-        layout.addPanelSlideListener(object: SlidingPaneLayout.PanelSlideListener,
-            SlidingUpPanelLayout.PanelSlideListener {
+        layout.addPanelSlideListener(object: SlidingPaneLayout.PanelSlideListener{
             override fun onPanelSlide(panel: View, slideOffset: Float) {
             }
-
-            override fun onPanelStateChanged(
-                panel: View?,
-                previousState: SlidingUpPanelLayout.PanelState?,
-                newState: SlidingUpPanelLayout.PanelState?
-            ) {
-                TODO("Not yet implemented")
-            }
-
             override fun onPanelOpened(panel: View) {
                 TODO("Not yet implemented")
 
             }
-
             override fun onPanelClosed(panel: View) {
                 TODO("Not yet implemented")
             }
-
         })
 
         //Se obtienen los datos del id de usuario
@@ -136,7 +125,6 @@ class MainActivity : AppCompatActivity() {
     private fun obtenerDatosUsuario() {
         comprobarConexion(applicationContext)
         val call: Call<String> = service.getDatosUsuario("Bearer " + tokenUsuario, idUsuario)
-
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if(response.isSuccessful && response.body() != null) {
@@ -144,7 +132,10 @@ class MainActivity : AppCompatActivity() {
                         val jsonUser = JSONObject(response.body()!!)
                         val nombre = jsonUser.optString("nombre")
                         val apellidos = jsonUser.optString("apellidos")
-
+                        val jornadaLaboral = jsonUser.optInt("idJornadaLaboral")
+                        val correo = jsonUser.optString("login")
+                        //val empresa = jsonUser.optInt("idEmpresa")
+                        //val rol = jsonUser.optInt("idRol")
 
                         val nombreView : TextView = findViewById(R.id.txt_nombreUsuario)
                         nombreView.setText(nombre)
@@ -152,6 +143,24 @@ class MainActivity : AppCompatActivity() {
                         val apellidosView : TextView = findViewById(R.id.txt_apellidosUsuario)
                         apellidosView.setText(apellidos)
 
+                        val jornadaLaboralView : TextView = findViewById(R.id.txt_jornadaLaboral)
+                        if(jornadaLaboral == 1) {
+                            jornadaLaboralView.setText("8 "+getString(R.string.horas))
+                        } else if(jornadaLaboral == 2) {
+                            jornadaLaboralView.setText("4 "+getString(R.string.horas))
+                        }
+
+                        val correoView : TextView = findViewById(R.id.txt_correo)
+                        correoView.setText(correo)
+
+                        /*
+                        val empresaView : TextView = findViewById(R.id.txt_empresa)
+                        empresaView.setText(empresa)
+
+                        val rolView : TextView = findViewById(R.id.txt_empresa)
+                        rolView.setText(rol)
+
+                         */
 
 
                     } catch (e: Exception) {
@@ -188,9 +197,19 @@ class MainActivity : AppCompatActivity() {
         if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
                 NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
         } else {
-            Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show()
+            AwesomeDialog.build(this)
+                .title("Sin conexión")
+                .body("No hay conexión a internet")
+                .icon(R.drawable.ic_sinconexion)
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
         }
     }
+}
+
+private fun SlidingUpPanelLayout.addPanelSlideListener(panelSlideListener: SlidingPaneLayout.PanelSlideListener) {
+
 }
 
 

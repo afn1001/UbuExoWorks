@@ -1,6 +1,10 @@
 package com.example.ubuexoworks
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
 import com.google.android.gms.location.FusedLocationProviderClient
 import org.json.JSONObject
@@ -55,7 +60,13 @@ class RecordarClave : AppCompatActivity() {
             if(email.isNotEmpty()) {
                 recuperarContraseña(email)
             } else {
-                Toast.makeText(this, "Email vacío", Toast.LENGTH_SHORT).show()
+                AwesomeDialog.build(this)
+                    .title("Correo vacío")
+                    .body("No se ha introducido el correo electrónico")
+                    .icon(R.drawable.ic_falla)
+                    .onPositive("Aceptar") {
+                        Log.d("Correo", "positive ")
+                    }
             }
         }
     }
@@ -66,7 +77,6 @@ class RecordarClave : AppCompatActivity() {
     fun irALogin(view: View) {
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 
@@ -77,6 +87,7 @@ class RecordarClave : AppCompatActivity() {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun recuperarContraseña(email: String) {
+        comprobarConexion(applicationContext)
         val call = service.recuperaContraseña(email)
 
         call.enqueue(object : Callback<String> {
@@ -88,14 +99,25 @@ class RecordarClave : AppCompatActivity() {
 
 
                         if(token.equals("Ok")) {
-                            Toast.makeText(applicationContext, "Se ha enviado un mensaje con la nueva contraseña", Toast.LENGTH_SHORT).show()
+                            AwesomeDialog.build(this@RecordarClave)
+                                .title("Cambio de contraseña correcto")
+                                .body("Se ha enviado un correo electrónico con la nueva contraseña")
+                                .icon(R.drawable.ic_funciona)
+                                .onPositive("Aceptar") {
+                                    Log.d("Cambiar contraseña", "positive ")
+                                }
                         }
                     } catch (e: Exception) {
                         Log.d("fichar", e.toString())
-                        Toast.makeText(applicationContext, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(applicationContext, "Falla", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(this@RecordarClave)
+                        .title("Cambio de contraseña fallido")
+                        .body("No se ha podido enviar el correo electrónico con la nueva contraseña")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("Cambiar contraseña fallo", "positive ")
+                        }
                 }
             }
 
@@ -113,5 +135,26 @@ class RecordarClave : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(ApiService::class.java)
+    }
+
+    /**
+     * Comprueba si el dispositivo dispone de conexión a internet
+     */
+    @SuppressLint("MissingPermission")
+    fun comprobarConexion(context: Context) {
+        val gestorConexion = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capacidadesDeRed = gestorConexion.activeNetwork
+        val infromacionDeRed = gestorConexion.getNetworkCapabilities(capacidadesDeRed)
+        if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
+        } else {
+            AwesomeDialog.build(this)
+                .title("Sin conexión")
+                .body("No hay conexión a internet")
+                .icon(R.drawable.ic_sinconexion)
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
+        }
     }
 }

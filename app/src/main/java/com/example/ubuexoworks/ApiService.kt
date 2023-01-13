@@ -41,7 +41,7 @@ interface ApiService {
     /**
      * Permite conectarse al método registraGasto de la API que envía los datos del ticket
      */
-    @POST("/api/gasto/registraGasto")
+    @POST("/api/gasto/registraGastoApp")
     fun registrarGasto(@Header("Authorization") Token: String?,
                        @Body gasto: Gasto) : Call<String>
 

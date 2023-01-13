@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Dietas">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -12,7 +13,9 @@
         android:layout_gravity="end"
         android:paddingBottom="30dp"
         android:src="@android:drawable/ic_input_add"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,93 +23,199 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="350dp"
-            android:layout_height="300dp"
-            android:id="@+id/imagen"
-            android:layout_margin="30dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Recognized Text"/>
-
-        <TextView
-            android:id="@+id/text_recognition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="TextView" />
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/iw_imagen"
+            android:layout_margin="30dp"
+            android:layout_gravity="center"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/dni" />
-            <EditText
-                android:id="@+id/et_dni"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:maxLength="9"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_taxLayout"
+                android:layout_width="@dimen/parametro"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/iva" />
+                android:layout_marginRight="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
                 <EditText
                     android:id="@+id/et_tax"
-                    android:layout_width="90dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:maxLength="7"/>
+                    android:hint="@string/iva"
+                    android:maxLength="7"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_dniLayout"
+                android:layout_width="@dimen/parametro"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <EditText
+                    android:id="@+id/et_dni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/dni"
+                    android:maxLength="9"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/total" />
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
 
-            <EditText
-                android:id="@+id/et_preciototal"
-                android:layout_width="90dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_totalLayout"
+                android:layout_width="@dimen/parametro"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:maxLength="7"/>
+                android:layout_marginRight="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <EditText
+                    android:id="@+id/et_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/total"
+                    android:maxLength="7"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_razonSocialLayout"
+                android:layout_width="@dimen/parametro"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <EditText
+                    android:id="@+id/et_razonSocial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/razonSocial"
+                    android:maxLength="15"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_reconocerTexto"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:text="@string/reconocer_texto"
-            />
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_tipoTicketLayout"
+                android:layout_width="@dimen/parametro"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
-        <Button
-            android:id="@+id/btn_enviarGasto"
+                <EditText
+                    android:id="@+id/et_tipoTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/tipoTicket"
+                    android:maxLength="15"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_descripcionLayout"
+                android:layout_width="@dimen/parametro"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <EditText
+                    android:id="@+id/et_descripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/descripcion"
+                    android:maxLength="30"
+                    android:background="@drawable/edit_text_bg"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_numeroTicketLayout"
+            android:layout_width="@dimen/parametro"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/et_numeroTicket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="@string/numeroTicket"
+                android:maxLength="20"
+                android:background="@drawable/edit_text_bg"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:text="Enviar gasto"
-            />
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                android:layout_gravity="center">
+                <Button
+                    android:id="@+id/btn_reconocerTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:text="@string/reconocer_texto"
+                    android:background="@drawable/edit_text_bg"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                android:layout_gravity="center">
+                <Button
+                    android:id="@+id/btn_enviarGasto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:text="@string/enviar_gasto"
+                    android:background="@drawable/edit_text_bg"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
 
 

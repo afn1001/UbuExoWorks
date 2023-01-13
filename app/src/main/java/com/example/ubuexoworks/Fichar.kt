@@ -9,11 +9,8 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,19 +23,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
+import com.example.ubuexoworks.Dialogs.BorrarFichajeDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -159,14 +155,32 @@ class Fichar : Fragment() {
                         //Si el fichaje es correcto nos devuelve un mensaje de confirmación y el contador comienza o se para
                         if(token.equals("Ok")) {
                             iniciarPararContador()
-                            Toast.makeText(context, "Fichaje realizado", Toast.LENGTH_SHORT).show()
+
+                            AwesomeDialog.build(requireActivity())
+                                .title("Fichaje realizado")
+                                .body("El fichaje ha sido realizado con éxito")
+                                .icon(R.drawable.ic_funciona)
+                                .onPositive("Aceptar") {
+                                    Log.d("TAG", "positive ")
+                                }
                         }
                     } catch (e: Exception) {
                         Log.d("fichar", e.toString())
-                        Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show()
+                        AwesomeDialog.build(requireActivity())
+                            .title("Fichaje fallido")
+                            .body("El fichaje no ha sido realizado")
+                            .icon(R.drawable.ic_falla)
+                            .onPositive("Aceptar") {
+                                Log.d("TAG", "positive ")
+                            }
                     }
                 } else {
-                    Toast.makeText(context, R.string.esperar, Toast.LENGTH_LONG).show()
+                    AwesomeDialog.build(requireActivity())
+                        .title("Espera")
+                        .body(getString(R.string.esperar))
+                        .onPositive("Aceptar") {
+                            Log.d("TAG", "positive ")
+                        }
                 }
             }
 
@@ -214,7 +228,7 @@ class Fichar : Fragment() {
         }
     }
 
-    private fun resetAction() {
+    private fun reiniciarContador() {
         ayudaContador.setTiempoParar(null)
         ayudaContador.setTiempoIniciar(null)
         pararContador()
@@ -235,7 +249,7 @@ class Fichar : Fragment() {
         if(ayudaContador.estaContando()) {
             ayudaContador.setTiempoParar(Date())
             pararContador()
-            resetAction()
+            reiniciarContador()
         } else {
             if(ayudaContador.pararTiempo() != null) {
                 ayudaContador.setTiempoIniciar(calcTiempoReinicio())
@@ -259,7 +273,7 @@ class Fichar : Fragment() {
         val timer = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
 
-        if(timer.equals("08:00:00")) {
+        if(timer.equals("00:01:00")) {
             with(NotificationManagerCompat.from(requireContext())) {
                 // notificationId is a unique int for each notification that you must define
                 notify(123, builder.build())

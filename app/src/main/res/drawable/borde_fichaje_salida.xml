@@ -6,7 +6,7 @@
 
     <!-- Color de fondo del recuadro -->
     <solid
-        android:color="@color/colorFondoFichajeSalida">
+        android:color="@color/common_google_signin_btn_text_light_disabled">
     </solid>
 
     <!-- Borde del recuadro -->

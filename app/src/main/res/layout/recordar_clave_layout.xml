@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:text="Introduce el correo electrónico \n asociado a tu cuenta."
+                android:text="@string/introduce_correo"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/entrada_sistema"
-                android:textColor="@color/design_default_color_primary"/>
+                android:textColor="@color/colorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 

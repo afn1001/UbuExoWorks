@@ -1,20 +1,20 @@
 package com.example.ubuexoworks
 
 import android.content.Context
-import android.graphics.Color
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewManager
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
 import com.example.ubuexoworks.Dialogs.BorrarFichajeDialog
+import java.util.Map.entry
+
 
 /**
  * Clase que sirve como adaptador para poder devolver la lista con todos los fichajes
@@ -46,10 +46,10 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
 
         val tvTipoFichaje: TextView = view.findViewById(R.id.tv_tipofichaje)
         if(esPar(position)) {
-            tvTipoFichaje.setText("Fichaje de entrada")
+            tvTipoFichaje.setText(mContext.getString(R.string.fichaje_entrada))
             view.setBackgroundResource(R.drawable.borde_fichaje_entrada)
         } else {
-            tvTipoFichaje.setText("Fichaje de salida")
+            tvTipoFichaje.setText(mContext.getString(R.string.fichaje_salida))
             view.setBackgroundResource(R.drawable.borde_fichaje_salida)
         }
 
@@ -86,6 +86,13 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
             val fragmentActivity = mContext as FragmentActivity
             val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
             BorrarFichajeDialog().show(fragmentManager, "EliminarFichajeFragment")
+        }
+
+        if(fichaje.solicitaBorrado) {
+            iwEliminarFichaje.visibility = View.INVISIBLE
+            iwEliminarFichaje.setOnClickListener(null)
+        } else {
+            iwEliminarFichaje.visibility = View.VISIBLE
         }
 
         if(fichaje.incidencia != null) {

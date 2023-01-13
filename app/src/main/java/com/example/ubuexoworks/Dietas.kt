@@ -4,7 +4,6 @@ package com.example.ubuexoworks
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -12,6 +11,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,23 +22,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Gasto
 import com.example.ubuexoworks.ClasesDeDatos.Receipts
+import com.example.ubuexoworks.Dialogs.ImagenDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Clase de la pestaña "Dietas" que sirve para realizar el escaneo de tickets y su posterior envío
@@ -48,7 +48,7 @@ class Dietas : Fragment() {
     private lateinit var service: ApiService
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var ivPhoto: ImageView
+    private lateinit var ivImagen: ImageView
 
 
     private lateinit var image : InputImage
@@ -56,6 +56,14 @@ class Dietas : Fragment() {
 
     private var idUsuario: String = ""
     private var tokenUsuario: String? = ""
+
+    private lateinit var etIva: EditText
+    private lateinit var etTotal: EditText
+    private lateinit var etDni: EditText
+    private lateinit var etRazonSocial: EditText
+    private lateinit var etTipoTicket: EditText
+    private lateinit var etDescripcion: EditText
+    private lateinit var etNumeroTicket: EditText
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,13 +73,27 @@ class Dietas : Fragment() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    accionesImagenDeCamara(result.data)
+                    accionesCamara(result.data)
                 }
             }
 
 
         //Lugar donde guardamos la foto
-        ivPhoto = view.findViewById(R.id.imagen)
+        //ivPhoto = view.findViewById(R.id.imagen)
+
+        //Se envía la imagen para poder ampliarla
+        ivImagen = view.findViewById(R.id.iw_imagen)
+        ivImagen.setOnClickListener {
+            //Se pasa el texto en Base64 de la imagen
+            val sp = context?.getSharedPreferences("Ubicacion", Context.MODE_PRIVATE)
+            val ed = sp?.edit()
+            ed?.putString("Imagen", encodeImage(bitmap))
+            ed?.commit()
+
+            val fragmentActivity = context as FragmentActivity
+            val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
+            ImagenDialog().show(fragmentManager, "UbicacionFragment")
+        }
 
         //Boton que para sacar fotos
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
@@ -79,12 +101,15 @@ class Dietas : Fragment() {
             tomarFotografía()
         }
 
-        //Texto reconocido
-        val textoReconocido : TextView = view.findViewById(R.id.text_recognition)
-        val etTax : EditText = view.findViewById(R.id.et_tax)
-        val etTotal : TextView = view.findViewById(R.id.et_preciototal)
+        //Obtenemos todos los EditText
+        etIva = view.findViewById(R.id.et_tax)
+        etTotal = view.findViewById(R.id.et_total)
+        etDni = view.findViewById(R.id.et_dni)
+        etRazonSocial = view.findViewById(R.id.et_razonSocial)
+        etTipoTicket = view.findViewById(R.id.et_tipoTicket)
+        etDescripcion = view.findViewById(R.id.et_descripcion)
+        etNumeroTicket = view.findViewById(R.id.et_numeroTicket)
 
-        val etDNI : TextView = view.findViewById(R.id.et_dni)
 
         //Se obtienen los datos del id de usuario
         val preferences: SharedPreferences = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE)
@@ -97,67 +122,88 @@ class Dietas : Fragment() {
 
         val botonReconocerTexto : Button = view.findViewById(R.id.btn_reconocerTexto)
         botonReconocerTexto.setOnClickListener { view ->
-            image = InputImage.fromBitmap(bitmap, 0)
-            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+            //Si no hay imagen no se puede reconocer el texto
+            if(ivImagen.drawable != null) {
+                image = InputImage.fromBitmap(bitmap, 0)
+                val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+                recognizer.process(image)
+                    .addOnSuccessListener { visionText ->
+                        //Si no reconoce texto en la imagen muestra un mensaje
+                        if(visionText.text != "") {
+                            val resultado = buscarFloat(visionText.text)
+                            if (resultado == null || resultado.isEmpty())
+                            else {
+                                val totalF = Collections.max(resultado)
+                                val secondLargestF = findSecondLargestFloat(resultado)
+                                val total = totalF.toString()
+                                val vat =
+                                    if (secondLargestF == 0.0f) "0" else "%.2f".format(totalF - secondLargestF)
+                                val receipts = Receipts(total, vat)
 
-            recognizer.process(image)
-                .addOnSuccessListener { visionText ->
-                    //textoReconocido.setText(visionText.text)
+                                etIva.setText(receipts.vat)
+                                etTotal.setText(receipts.total)
+                            }
 
-                    val resultado = buscarFloat(visionText.text)
-                    Toast.makeText(context, resultado.toString(), Toast.LENGTH_SHORT).show()
-                    if (resultado == null || resultado.isEmpty())
-                    else {
-                        val totalF = Collections.max(resultado)
-                        val secondLargestF = findSecondLargestFloat(resultado)
-                        val total = totalF.toString()
-                        val vat =
-                            if (secondLargestF == 0.0f) "0" else "%.2f".format(totalF - secondLargestF)
-                        val receipts = Receipts(total, vat)
-
-                        etTax.setText(receipts.vat)
-                        etTotal.setText(receipts.total)
+                        } else {
+                            AwesomeDialog.build(requireActivity())
+                                .title("No hay texto")
+                                .body("No se ha podido reconocer texto en la imagen")
+                                .onPositive("Aceptar") {
+                                    Log.d("TAG", "positive ")
+                                }
+                        }
 
                     }
-
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    // ...
-                }
+                    .addOnFailureListener { e ->
+                        // Task failed with an exception
+                        // ...
+                    }
+            } else {
+                AwesomeDialog.build(requireActivity())
+                    .title("No se ha podido reconocer")
+                    .body("No se ha podido reconocer texto porque no hay ninguna imagen")
+                    .onPositive("Aceptar") {
+                        Log.d("TAG", "positive ")
+                    }
+            }
         }
 
 
         val botonEnviarGasto : Button = view.findViewById(R.id.btn_enviarGasto)
         botonEnviarGasto.setOnClickListener { view ->
-            val file = bitmapToFile(bitmap)
-            enviarGasto(file)
+            if(todosLosCamposRellenos()) {
+                val file = encodeImage(bitmap)
+                enviarGasto(file)
+            } else {
+                AwesomeDialog.build(requireActivity())
+                    .title("Envío de gasto fallido")
+                    .body("No se ha podido enviar el gasto porque queda algún campo por completar")
+                    .icon(R.drawable.ic_falla)
+                    .onPositive("Aceptar") {
+                        Log.d("TAG", "positive ")
+                    }
+            }
         }
         return view
     }
 
-    /**
-     * Transforma el archivo de imagen Bitmap en un archivo File
-     * @param bitmap El bitmap de la imagen obtenida del ticket
-     */
-    fun bitmapToFile(bitmap: Bitmap): File? {
-        val wrapper = ContextWrapper(requireContext())
-        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-        file = File(file,"${UUID.randomUUID()}.jpg")
-        val stream: OutputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG,25,stream)
-        stream.flush()
-        stream.close()
-        return file
+    private fun encodeImage(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        val temp = Base64.encodeToString(b, Base64.DEFAULT)
+        Log.d("Codificación", temp)
+        return temp
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun enviarGasto(file: File?) {
+    private fun enviarGasto(file: String) {
         context?.let { (activity as MainActivity)?.comprobarConexion(it) }
         val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
 
-        val gasto = Gasto(file, idUsuario, fecha, "ticket","transporte", 1512.5, 262.5, "12345678A", "Cena empresa", "0001")
+        val gasto = Gasto(file, idUsuario.toInt(), fecha, etTipoTicket.text.toString(), etTotal.text.toString().toDouble(), etIva.text.toString().toDouble(),
+            etDni.text.toString(), etRazonSocial.text.toString(), etDescripcion.text.toString(), etNumeroTicket.text.toString())
         Log.d("gasto", gasto.toString())
         val call = service.registrarGasto("Bearer " + tokenUsuario, gasto)
 
@@ -165,22 +211,27 @@ class Dietas : Fragment() {
             override fun onResponse(call: Call<String>, response: Response<String>) {
 
                 if(response.isSuccessful && response.body() != null) {
-                    //Intentamos mapear el json a la clase Usuario
+
                     try {
-                        val jsonUser = JSONObject(response.body()!!)
-                        val token = jsonUser.optString("token")
-
-                        Toast.makeText(context, "Funciona", Toast.LENGTH_SHORT).show()
-
-                        if(token.equals("OK")) {
-                            Toast.makeText(context, "Funciona", Toast.LENGTH_SHORT).show()
-                        }
+                        AwesomeDialog.build(requireActivity())
+                                .title("Gasto enviado")
+                                .body("Gasto enviado con éxito")
+                                .icon(R.drawable.ic_funciona)
+                                .onPositive("Aceptar") {
+                                    Log.d("TAG", "positive ")
+                                }
                     } catch (e: Exception) {
                         Log.d("registrarGasto", e.toString())
                         Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Falla", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(requireActivity())
+                        .title("Fallo")
+                        .body("Fallo al intentar enviar el gasto")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("registraGasto", "positive ")
+                        }
                 }
             }
 
@@ -230,11 +281,23 @@ class Dietas : Fragment() {
         }
     }
 
-    private fun accionesImagenDeCamara(intent: Intent?) {
+    private fun accionesCamara(intent: Intent?) {
         bitmap = intent?.extras?.get("data") as Bitmap
-        ivPhoto.setImageBitmap(bitmap)
+        ivImagen.setImageBitmap(bitmap)
     }
 
-
+    /**
+     * Comprueba que se han rellenado todos lo campos
+     * @return true Si todos los campos se han rellenado
+     * @return false Si queda algún campo por completar
+     */
+    private fun todosLosCamposRellenos(): Boolean {
+        if(ivImagen.drawable==null || etTipoTicket.text.toString()=="" || etTotal.text.toString().toDouble().equals("") || etIva.text.toString().toDouble().equals("") ||
+        etDni.text.toString()=="" || etRazonSocial.text.toString()=="" || etDescripcion.text.toString()=="" || etNumeroTicket.text.toString()=="") {
+            return false
+        } else {
+            return true
+        }
+    }
 
 }

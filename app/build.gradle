@@ -70,6 +70,12 @@ dependencies {
     //Para mostrar la ubicación en el mapa
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+    //Diálogo de confirmación
+    implementation 'com.github.chnouman:AwesomeDialog:1.0.5'
+
+    //Para ampliar la imagen
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
+
 
 
 }

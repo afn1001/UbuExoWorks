@@ -13,5 +13,6 @@ data class FichajeObtenido(
     val latitud: Float,
     val longitud: Float,
     val tiempoTrabajado: String,
-    val tipo: String
+    val tipo: String,
+    val solicitaBorrado: Boolean
 )

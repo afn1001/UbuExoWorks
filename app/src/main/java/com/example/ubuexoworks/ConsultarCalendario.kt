@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,7 +96,13 @@ class ConsultarCalendario : Fragment() {
 
 
                 } else {
-                    Toast.makeText(requireContext(), "Falla", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(requireActivity())
+                        .title("Fichajes no obtenidos")
+                        .body("No se han podido recuperar los fichajes del empleado")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("TAG", "positive ")
+                        }
                 }
             }
 

@@ -11,6 +11,11 @@
     <string name="titulo_datos_usuario">Datos del usuario</string>
     <string name="nombre">Nombre:</string>
     <string name="apellidos">Apellidos:</string>
+    <string name="jornadaLaboral">Jornada laboral:</string>
+    <string name="correoElectronico">Correo electrónico:</string>
+    <string name="empresa">Empresa:</string>
+    <string name="rol">Rol:</string>
+    <string name="horas">horas</string>
 
     <!--Strings del menú de fragments -->
     <string name="frag_fichar">Fichar</string>
@@ -22,6 +27,8 @@
     <string name="esperar">Debes esperar al menos 5 minutos hasta realizar el siguiente fichaje</string>
 
     <!--Strings del item de cada fichaje -->
+    <string name="fichaje_entrada">Fichaje de entrada</string>
+    <string name="fichaje_salida">Fichaje de salida</string>
     <string name="fecha">Fecha: </string>
     <string name="hora">Hora: </string>
     <string name="latitud">Latitud: </string>
@@ -50,6 +57,15 @@
     <string name="dni">DNI: </string>
     <string name="iva">IVA: </string>
     <string name="total">Total: </string>
+    <string name="razonSocial">Razón social:</string>
+    <string name="tipoTicket">Tipo:</string>
+    <string name="descripcion">Descripción:</string>
+    <string name="numeroTicket">Número de ticket:</string>
     <string name="reconocer_texto">Reconocer texto</string>
+    <string name="enviar_gasto">Enviar gasto</string>
+
+    <!-- Strings de recuperar contraseña -->
+    <string name="introduce_correo">Introduce el correo electrónico \n asociado a tu cuenta.</string>
+    <string name="enviar">Enviar</string>
 
 </resources>

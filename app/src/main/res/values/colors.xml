@@ -17,7 +17,8 @@
     <color name="colorBordeFichajes">#BFBFBF</color>
 
     <!-- Colores para el círculo -->
-    <color name="colorPrimary">#a9bbe1</color>
+    <color name="colorPrincipalAnterior">#a9bbe1</color>
+    <color name="colorPrimary">#82A1E4</color>
     <color name="colorPrimaryVariant">#a9bbe1</color>
     <color name="colorPrimaryBackground">#D6B5FF</color>
 

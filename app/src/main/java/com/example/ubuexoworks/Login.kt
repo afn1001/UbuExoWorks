@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Credenciales
 import org.json.JSONObject
 import retrofit2.Call
@@ -79,10 +80,22 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 if(password.isNotEmpty()) {
                     ejecutarLogin(email, password, myImei)
                 } else {
-                    Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(this)
+                        .title("Contraseña vacía")
+                        .body("No ha introducido la contraseña")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("Contraseña", "positive ")
+                        }
                 }
             } else {
-                Toast.makeText(this, "Email vacío", Toast.LENGTH_SHORT).show()
+                AwesomeDialog.build(this)
+                    .title("Correo vacío")
+                    .body("No se ha introducido el correo electrónico")
+                    .icon(R.drawable.ic_falla)
+                    .onPositive("Aceptar") {
+                        Log.d("Correo", "positive ")
+                    }
             }
         }
 
@@ -94,10 +107,22 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 if(password.isNotEmpty()) {
                     registrarDispositivo(email, password, myImei)
                 } else {
-                    Toast.makeText(this, "Contraseña vacía", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(this)
+                        .title("Contraseña vacía")
+                        .body("No ha introducido la contraseña")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("Contraseña", "positive ")
+                        }
                 }
             } else {
-                Toast.makeText(this, "Email vacío", Toast.LENGTH_SHORT).show()
+                AwesomeDialog.build(this)
+                    .title("Correo vacío")
+                    .body("No se ha introducido el correo electrónico")
+                    .icon(R.drawable.ic_falla)
+                    .onPositive("Aceptar") {
+                        Log.d("Correo", "positive ")
+                    }
             }
 
         }
@@ -131,10 +156,15 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         }
                     } catch (e: Exception) {
                         Log.d("login", e.toString())
-                        Toast.makeText(this@Login, response.body(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(this@Login)
+                        .title("Credenciales inválidas")
+                        .body("Las credenciales introducidas no coinciden con ninguna almacenada en la base de datos")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("Credenciales registrar", "positive ")
+                        }
                 }
             }
 
@@ -153,6 +183,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
      * @exception e Devuelve una excepción si el dispositivo ya está registrado
      */
     private fun registrarDispositivo(email: String, password: String, imei: String) {
+        comprobarConexion(applicationContext)
         val credenciales = Credenciales(email, password, imei)
         val call = service.registraDispositivo(credenciales)
 
@@ -165,10 +196,22 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                     } catch (e: Exception) {
                         Log.d("registroDispositivo", e.toString())
-                        Toast.makeText(this@Login, "Dispositivo registrado", Toast.LENGTH_SHORT).show()
+                        AwesomeDialog.build(this@Login)
+                            .title("Dispositivo registrado")
+                            .body("Se ha registrado el dispositivo al usuario")
+                            .icon(R.drawable.ic_funciona)
+                            .onPositive("Aceptar") {
+                                Log.d("Registro", "positive ")
+                            }
                     }
                 } else {
-                    Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                    AwesomeDialog.build(this@Login)
+                        .title("Fallo en el registro")
+                        .body("No se ha podido registrar el dispositivo porque las cedenciales no son correctas")
+                        .icon(R.drawable.ic_falla)
+                        .onPositive("Aceptar") {
+                            Log.d("Registro fallo", "positive ")
+                        }
                 }
             }
 
@@ -200,7 +243,6 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             cambiarIdioma(this, "en")
             finish()
             startActivity(intent)
-
         }
     }
 
@@ -214,7 +256,6 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         var config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
-
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
@@ -226,7 +267,6 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     fun irARecordarClave(view: View) {
         val intent = Intent(this, RecordarClave::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 
@@ -249,7 +289,13 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
                 NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
         } else {
-            Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show()
+            AwesomeDialog.build(this)
+                .title("Sin conexión")
+                .body("No hay conexión a internet")
+                .icon(R.drawable.ic_sinconexion)
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
         }
     }
 
