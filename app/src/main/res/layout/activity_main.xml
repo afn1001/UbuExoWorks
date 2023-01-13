@@ -36,14 +36,15 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Datos"
-            android:id="@+id/txt_hola"
+            android:text="﹀"
+            android:textSize="20dp"
+            android:id="@+id/txt_datos"
             android:gravity="bottom|center"/>
 
 
@@ -82,7 +83,7 @@
                         android:id="@+id/txt_nombreUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="@dimen/margen"/>
 
                 </LinearLayout>
 
@@ -99,7 +100,7 @@
                         android:id="@+id/txt_apellidosUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="@dimen/margen"/>
 
                 </LinearLayout>
 
@@ -116,7 +117,7 @@
                         android:id="@+id/txt_jornadaLaboral"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="@dimen/margen"/>
 
                 </LinearLayout>
 
@@ -133,46 +134,11 @@
                         android:id="@+id/txt_correo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/empresa"/>
-
-                    <TextView
-                        android:id="@+id/txt_empresa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rol"/>
-
-                    <TextView
-                        android:id="@+id/txt_rol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="@dimen/margen"/>
 
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

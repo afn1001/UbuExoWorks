@@ -80,11 +80,6 @@ class RecordarClave : AppCompatActivity() {
         finish()
     }
 
-    /**
-     * Se envía un correo a un usuario que ha olvidado la contraseña
-     * @param email Correo de un usuario registrado
-     * @exception e Devuelve excepción si el correo no está registrado
-     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun recuperarContraseña(email: String) {
         comprobarConexion(applicationContext)

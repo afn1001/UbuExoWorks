@@ -134,8 +134,6 @@ class MainActivity : AppCompatActivity() {
                         val apellidos = jsonUser.optString("apellidos")
                         val jornadaLaboral = jsonUser.optInt("idJornadaLaboral")
                         val correo = jsonUser.optString("login")
-                        //val empresa = jsonUser.optInt("idEmpresa")
-                        //val rol = jsonUser.optInt("idRol")
 
                         val nombreView : TextView = findViewById(R.id.txt_nombreUsuario)
                         nombreView.setText(nombre)
@@ -152,15 +150,6 @@ class MainActivity : AppCompatActivity() {
 
                         val correoView : TextView = findViewById(R.id.txt_correo)
                         correoView.setText(correo)
-
-                        /*
-                        val empresaView : TextView = findViewById(R.id.txt_empresa)
-                        empresaView.setText(empresa)
-
-                        val rolView : TextView = findViewById(R.id.txt_empresa)
-                        rolView.setText(rol)
-
-                         */
 
 
                     } catch (e: Exception) {
@@ -179,7 +168,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
+    /**
+     * Permite crear el servicio para conectar con la API
+     */
     fun createApiService() : ApiService {
         retrofit = Retrofit.Builder()
             .baseUrl("https://miubuapp.herokuapp.com/")
@@ -189,6 +180,9 @@ class MainActivity : AppCompatActivity() {
         return retrofit.create(ApiService::class.java)
     }
 
+    /**
+     * Permite comprobar si el dispositivo tiene o no conexión a internet
+     */
     @SuppressLint("MissingPermission")
     fun comprobarConexion(context: Context) {
         val gestorConexion = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

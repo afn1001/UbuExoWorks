@@ -95,10 +95,6 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
             iwEliminarFichaje.visibility = View.VISIBLE
         }
 
-        if(fichaje.incidencia != null) {
-
-        }
-
         return view
     }
 

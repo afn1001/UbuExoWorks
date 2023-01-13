@@ -12,6 +12,10 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.example.ubuexoworks.R
 
+/**
+ * Clase para mostrar la imagen obtenida con un tamaño mayor y permitiendo ampliar
+ * @author Alejandro Fraga Neila
+ */
 class ImagenDialog: DialogFragment() {
 
     private var imagen: String = ""

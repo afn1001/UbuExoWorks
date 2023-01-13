@@ -286,11 +286,6 @@ class Dietas : Fragment() {
         ivImagen.setImageBitmap(bitmap)
     }
 
-    /**
-     * Comprueba que se han rellenado todos lo campos
-     * @return true Si todos los campos se han rellenado
-     * @return false Si queda algún campo por completar
-     */
     private fun todosLosCamposRellenos(): Boolean {
         if(ivImagen.drawable==null || etTipoTicket.text.toString()=="" || etTotal.text.toString().toDouble().equals("") || etIva.text.toString().toDouble().equals("") ||
         etDni.text.toString()=="" || etRazonSocial.text.toString()=="" || etDescripcion.text.toString()=="" || etNumeroTicket.text.toString()=="") {

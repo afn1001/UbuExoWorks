@@ -175,13 +175,6 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
-    /**
-     * Registra un dispositivo para que solo se pueda hacer login con un email y una contraseña únicos
-     * @param email Correo electrónico de un usuario ya registrado
-     * @param password Contraseña de un usuario ya registrado
-     * @param imei Número identificativo de este dispositivo
-     * @exception e Devuelve una excepción si el dispositivo ya está registrado
-     */
     private fun registrarDispositivo(email: String, password: String, imei: String) {
         comprobarConexion(applicationContext)
         val credenciales = Credenciales(email, password, imei)
@@ -222,6 +215,9 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    /**
+     * Permite crear el servicio para conectar con la API
+     */
     fun createApiService() : ApiService {
         retrofit = Retrofit.Builder()
             .baseUrl("https://miubuapp.herokuapp.com/")

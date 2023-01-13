@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="@drawable/borde_fichaje_entrada">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +19,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="20dp">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
@@ -32,15 +31,15 @@
                 android:id="@+id/tv_fecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margen"
                 android:text="Nada"/>
          </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="50dp"
             android:gravity="left">
             <TextView
                 android:layout_width="wrap_content"
@@ -51,6 +50,7 @@
                 android:id="@+id/tv_hora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margen"
                 android:text="Nada"/>
         </LinearLayout>
     </LinearLayout>
@@ -61,7 +61,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="20dp">
          <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
@@ -73,14 +73,14 @@
                 android:id="@+id/tv_latitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margen"
                 android:text="Nada" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="50dp"
             android:gravity="left">
             <TextView
                 android:layout_width="wrap_content"
@@ -91,7 +91,9 @@
                 android:id="@+id/tv_longitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nada" />
+                android:layout_marginLeft="@dimen/margen"
+                android:text="Nada"
+                />
         </LinearLayout>
     </LinearLayout>
 
@@ -103,16 +105,16 @@
         android:layout_marginBottom="5dp">
         <ImageView
             android:id="@+id/iw_ubicacion"
-            android:layout_width="20dp"
+            android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@drawable/icono_googlemaps"
+            android:background="@drawable/ic_googlemaps"
             />
 
         <ImageView
             android:id="@+id/iw_eliminarFichaje"
-            android:layout_width="20dp"
+            android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@drawable/papelera"
+            android:background="@drawable/cancel"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"/>
     </LinearLayout>
