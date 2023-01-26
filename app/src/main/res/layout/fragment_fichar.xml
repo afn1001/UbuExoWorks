@@ -5,7 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-        <ProgressBar
+
+    <ProgressBar
                 android:id="@+id/progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="400dp"
@@ -43,7 +44,19 @@
             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
             app:layout_constraintStart_toStartOf="@+id/progress_bar"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btn_mostrar"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/boton_circular"
+        android:text="Mostrar"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@+id/btn_fichar"
+        tools:layout_editor_absoluteY="498dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

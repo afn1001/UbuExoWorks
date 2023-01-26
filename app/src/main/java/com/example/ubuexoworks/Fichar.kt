@@ -8,7 +8,10 @@ import android.content.*
 import android.content.Context.MODE_PRIVATE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -53,6 +56,7 @@ class Fichar : Fragment() {
     private var tokenUsuario: String? = ""
     private lateinit var builder: NotificationCompat.Builder
     private lateinit var barTimer: ProgressBar
+    lateinit var amigosDBHelper: miSQLiteHelper
 
     //Timer
     lateinit var ayudaContador: AyudaContador
@@ -82,6 +86,7 @@ class Fichar : Fragment() {
 
         //Botón para fichar
         view.findViewById<Button>(R.id.btn_fichar).setOnClickListener {
+            iniciarPararContador()
             obtenerUbicación()
         }
 
@@ -116,6 +121,32 @@ class Fichar : Fragment() {
 
         barTimer = view.findViewById(R.id.progress_bar)
 
+        amigosDBHelper = miSQLiteHelper(requireContext())
+        view.findViewById<Button>(R.id.btn_mostrar).setOnClickListener {
+            // Para recuperar la información
+            val db : SQLiteDatabase = amigosDBHelper.readableDatabase
+            val cursor = db.rawQuery(
+                "SELECT * FROM fichajes",
+                null)
+
+            var result = ""
+            if (cursor.moveToFirst()) {
+                do {
+                    result = result + cursor.getInt(0).toString() + " - " +
+                            cursor.getString(1) + " - " +
+                            cursor.getString(2) + "\n"
+
+
+                } while (cursor.moveToNext())
+            }
+            AwesomeDialog.build(requireActivity())
+                .title("Fichajes en espera")
+                .body(result)
+                .icon(R.drawable.ic_sinconexion)
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
+        }
 
         return view
 
@@ -138,7 +169,7 @@ class Fichar : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fichar() {
-        context?.let { (activity as MainActivity)?.comprobarConexion(it) }
+        context?.let { comprobarConexionFichar(it) }
         val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
         val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
@@ -154,8 +185,6 @@ class Fichar : Fragment() {
 
                         //Si el fichaje es correcto nos devuelve un mensaje de confirmación y el contador comienza o se para
                         if(token.equals("Ok")) {
-                            iniciarPararContador()
-
                             AwesomeDialog.build(requireActivity())
                                 .title("Fichaje realizado")
                                 .body("El fichaje ha sido realizado con éxito")
@@ -212,6 +241,36 @@ class Fichar : Fragment() {
         }
     }
 
+    /**
+     * Permite comprobar si el dispositivo tiene o no conexión a internet
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("MissingPermission", "Range")
+    fun comprobarConexionFichar(context: Context) {
+        val gestorConexion = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capacidadesDeRed = gestorConexion.activeNetwork
+        val infromacionDeRed = gestorConexion.getNetworkCapabilities(capacidadesDeRed)
+        if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR) == true) {
+        } else {
+            //Cuando no hay conexión, el fichaje se almacena en la base de datos
+            AwesomeDialog.build(requireActivity())
+                .title("Fichaje sin conexión")
+                .body("No hay conexión a internet, los fichajes se almacenan para realizarse cuando disponga de ella")
+                .icon(R.drawable.ic_sinconexion)
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
+
+            val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+            // calling method to add
+            // name to our database
+            amigosDBHelper.añadirFichajeSinConexion(fecha, hora)
+
+
+        }
+    }
 
 
     private inner class TimeTask: TimerTask() {
@@ -273,7 +332,7 @@ class Fichar : Fragment() {
         val timer = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
 
-        if(timer.equals("00:01:00")) {
+        if(timer.equals("00:00:10")) {
             with(NotificationManagerCompat.from(requireContext())) {
                 // notificationId is a unique int for each notification that you must define
                 notify(123, builder.build())

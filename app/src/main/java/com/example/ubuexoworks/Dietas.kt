@@ -81,18 +81,20 @@ class Dietas : Fragment() {
         //Lugar donde guardamos la foto
         //ivPhoto = view.findViewById(R.id.imagen)
 
-        //Se envía la imagen para poder ampliarla
+        //Se comprueba si hay imagen y, si hay, se envía para poder ampliarla
         ivImagen = view.findViewById(R.id.iw_imagen)
         ivImagen.setOnClickListener {
-            //Se pasa el texto en Base64 de la imagen
-            val sp = context?.getSharedPreferences("Ubicacion", Context.MODE_PRIVATE)
-            val ed = sp?.edit()
-            ed?.putString("Imagen", encodeImage(bitmap))
-            ed?.commit()
+            if(ivImagen.drawable != null) {
+                //Se pasa el texto en Base64 de la imagen
+                val sp = context?.getSharedPreferences("Ubicacion", Context.MODE_PRIVATE)
+                val ed = sp?.edit()
+                ed?.putString("Imagen", encodeImage(bitmap))
+                ed?.commit()
 
-            val fragmentActivity = context as FragmentActivity
-            val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
-            ImagenDialog().show(fragmentManager, "UbicacionFragment")
+                val fragmentActivity = context as FragmentActivity
+                val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
+                ImagenDialog().show(fragmentManager, "UbicacionFragment")
+            }
         }
 
         //Boton que para sacar fotos
@@ -136,8 +138,7 @@ class Dietas : Fragment() {
                                 val totalF = Collections.max(resultado)
                                 val secondLargestF = findSecondLargestFloat(resultado)
                                 val total = totalF.toString()
-                                val vat =
-                                    if (secondLargestF == 0.0f) "0" else "%.2f".format(totalF - secondLargestF)
+                                val vat = secondLargestF.toString()
                                 val receipts = Receipts(total, vat)
 
                                 etIva.setText(receipts.vat)

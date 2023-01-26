@@ -89,19 +89,13 @@ class RecordarClave : AppCompatActivity() {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if(response.isSuccessful && response.body() != null) {
                     try {
-                        val jsonUser = JSONObject(response.body()!!)
-                        val token = jsonUser.optString("token")
-
-
-                        if(token.equals("Ok")) {
-                            AwesomeDialog.build(this@RecordarClave)
-                                .title("Cambio de contraseña correcto")
-                                .body("Se ha enviado un correo electrónico con la nueva contraseña")
-                                .icon(R.drawable.ic_funciona)
-                                .onPositive("Aceptar") {
-                                    Log.d("Cambiar contraseña", "positive ")
-                                }
-                        }
+                        AwesomeDialog.build(this@RecordarClave)
+                            .title("Cambio de contraseña")
+                            .body("Se ha enviado un correo electrónico con la nueva contraseña")
+                            .icon(R.drawable.ic_funciona)
+                            .onPositive("Aceptar") {
+                                Log.d("Cambiar contraseña", "positive ")
+                            }
                     } catch (e: Exception) {
                         Log.d("fichar", e.toString())
                     }
