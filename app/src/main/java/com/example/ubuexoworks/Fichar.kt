@@ -21,23 +21,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import com.example.awesomedialog.*
 import com.example.ubuexoworks.ClasesDeDatos.Fichaje
-import com.example.ubuexoworks.Dialogs.BorrarFichajeDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -56,7 +54,7 @@ class Fichar : Fragment() {
     private var tokenUsuario: String? = ""
     private lateinit var builder: NotificationCompat.Builder
     private lateinit var barTimer: ProgressBar
-    lateinit var amigosDBHelper: miSQLiteHelper
+    lateinit var fichajesBD: miSQLiteHelper
 
     //Timer
     lateinit var ayudaContador: AyudaContador
@@ -90,9 +88,12 @@ class Fichar : Fragment() {
             obtenerUbicación()
         }
 
+
         //Timer
         tvTiempo = view.findViewById(R.id.txt_tiempo)
-        ayudaContador = AyudaContador(requireContext())
+        ayudaContador = context?.let { AyudaContador(it) }!!
+
+
 
         if(ayudaContador.estaContando()) {
             iniciarContador()
@@ -121,10 +122,11 @@ class Fichar : Fragment() {
 
         barTimer = view.findViewById(R.id.progress_bar)
 
-        amigosDBHelper = miSQLiteHelper(requireContext())
-        view.findViewById<Button>(R.id.btn_mostrar).setOnClickListener {
+        //Se añade la lista de fichajes sin conexión
+        fichajesBD = miSQLiteHelper(requireContext())
+        view.findViewById<FloatingActionButton>(R.id.btn_mostrar).setOnClickListener {
             // Para recuperar la información
-            val db : SQLiteDatabase = amigosDBHelper.readableDatabase
+            val db : SQLiteDatabase = fichajesBD.readableDatabase
             val cursor = db.rawQuery(
                 "SELECT * FROM fichajes",
                 null)
@@ -146,6 +148,46 @@ class Fichar : Fragment() {
                 .onPositive("Aceptar") {
                     Log.d("TAG", "positive ")
                 }
+        }
+
+
+        //Se obtiene la ubicación al entrar en la pestaña
+        //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
+        if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } != PackageManager.PERMISSION_GRANTED &&
+            context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
+            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101) }
+        }
+
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if(location != null) {
+                //Se obtiene la latitud y la longitud
+                latitud = location.latitude.toString()
+                longitud = location.longitude.toString()
+            }
+        }
+
+        //Comprobamos si hay conexión a internet a tiempo real y se lanzan los fichajes que se hayan realizado sin conexión
+        val networkConnection= NetworkConnection(requireContext())
+        networkConnection.observe(requireActivity()) { isConnected ->
+            if (isConnected) {
+                val db : SQLiteDatabase = fichajesBD.readableDatabase
+                val cursor = db.rawQuery(
+                    "SELECT * FROM fichajes",
+                    null)
+
+                var fecha = ""
+                var hora = ""
+                if (cursor.moveToFirst()) {
+                    do {
+                        fecha = cursor.getString(1)
+                        hora = cursor.getString(2)
+                        ficharSinConexion(fecha, hora)
+                    } while (cursor.moveToNext())
+                }
+
+                fichajesBD.borrarTabla()
+            } else {
+            }
         }
 
         return view
@@ -171,7 +213,7 @@ class Fichar : Fragment() {
     private fun fichar() {
         context?.let { comprobarConexionFichar(it) }
         val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-        val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+        val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         val fichaje = Fichaje(idUsuario, fecha, hora, longitud, latitud)
         val call = service.fichar("Bearer " + tokenUsuario, fichaje)
@@ -220,14 +262,71 @@ class Fichar : Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun ficharSinConexion (fecha: String, hora: String){
+        context?.let { comprobarConexionFichar(it) }
+
+        val fichaje = Fichaje(idUsuario, fecha, hora, longitud, latitud)
+        val call = service.fichar("Bearer " + tokenUsuario, fichaje)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if(response.isSuccessful && response.body() != null) {
+                    try {
+                        val jsonUser = JSONObject(response.body()!!)
+                        val token = jsonUser.optString("token")
+
+                        //Si el fichaje es correcto nos devuelve un mensaje de confirmación y el contador comienza o se para
+                        if(token.equals("Ok")) {
+                            activity?.let {
+                                AwesomeDialog.build(it)
+                                    .title("Fichaje realizado")
+                                    .body("El fichaje ha sido realizado con éxito")
+                                    .icon(R.drawable.ic_funciona)
+                                    .onPositive("Aceptar") {
+                                        Log.d("TAG", "positive ")
+                                    }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d("fichar", e.toString())
+                        activity?.let {
+                            AwesomeDialog.build(it)
+                                .title("Fichaje fallido")
+                                .body("El fichaje no ha sido realizado")
+                                .icon(R.drawable.ic_falla)
+                                .onPositive("Aceptar") {
+                                    Log.d("TAG", "positive ")
+                                }
+                        }
+                    }
+                } else {
+                    activity?.let {
+                        AwesomeDialog.build(it)
+                            .title("Espera")
+                            .body(getString(R.string.esperar))
+                            .onPositive("Aceptar") {
+                                Log.d("TAG", "positive ")
+                            }
+                    }
+                }
+            }
+
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("fichar", t.toString())
+            }
+        })
+    }
+
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerUbicación() {
 
         //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
-        if(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
+        if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } != PackageManager.PERMISSION_GRANTED &&
+            context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
+            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101) }
         }
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -263,10 +362,10 @@ class Fichar : Fragment() {
                 }
 
             val fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-            val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+            val hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
             // calling method to add
             // name to our database
-            amigosDBHelper.añadirFichajeSinConexion(fecha, hora)
+            fichajesBD.añadirFichajeSinConexion(fecha, hora)
 
 
         }

@@ -22,6 +22,14 @@ class miSQLiteHelper(context: Context) : SQLiteOpenHelper(
         onCreate(db)
     }
 
+    fun borrarTabla() {
+        val ordenBorrado = "DROP TABLE IF EXISTS fichajes"
+
+        val db = this.writableDatabase
+        db!!.execSQL(ordenBorrado)
+        onCreate(db)
+    }
+
     fun añadirFichajeSinConexion(fecha: String, hora: String) {
         val datos = ContentValues()
         datos.put("fecha", fecha)
