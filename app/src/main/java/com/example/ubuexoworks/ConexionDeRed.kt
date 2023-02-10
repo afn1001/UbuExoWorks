@@ -1,5 +1,6 @@
 package com.example.ubuexoworks
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,27 +12,27 @@ import android.os.Build
 import androidx.lifecycle.LiveData
 
 @Suppress("DEPRECATION")
-class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
-    private val connectivityManager: ConnectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+@SuppressLint("MissingPermission")
+class ConexionDeRed(private val context: Context) : LiveData<Boolean>() {
+    private val administradorConectividad: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private lateinit var networkConnectionCallback: ConnectivityManager.NetworkCallback
     override fun onActive() {
         super.onActive()
-        updateNetworkConnection()
+        actualizarConexionRed()
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback())
+                administradorConectividad.registerDefaultNetworkCallback(devolucionLlamadaAdministrador())
             }
             else -> {
                 context.registerReceiver(
-                    networkReceiver,
+                    receptorDeRed,
                     IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
                 )
             }
         }
     }
 
-    private fun connectivityManagerCallback(): ConnectivityManager.NetworkCallback {
+    private fun devolucionLlamadaAdministrador(): ConnectivityManager.NetworkCallback {
         networkConnectionCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
@@ -44,13 +45,13 @@ class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
         }
         return networkConnectionCallback
     }
-    private fun updateNetworkConnection() {
-        val activeNetworkConnection: NetworkInfo? = connectivityManager.activeNetworkInfo
+    private fun actualizarConexionRed() {
+        val activeNetworkConnection: NetworkInfo? = administradorConectividad.activeNetworkInfo
         postValue(activeNetworkConnection?.isConnected == true)
     }
-    private val networkReceiver= object : BroadcastReceiver() {
+    private val receptorDeRed= object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            updateNetworkConnection()
+            actualizarConexionRed()
         }
     }
 }

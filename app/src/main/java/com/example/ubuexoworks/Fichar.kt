@@ -5,11 +5,11 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.*
-import android.content.Context.MODE_PRIVATE
-import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Context.*
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.location.Location
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -22,6 +22,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -35,7 +36,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -54,7 +54,7 @@ class Fichar : Fragment() {
     private var tokenUsuario: String? = ""
     private lateinit var builder: NotificationCompat.Builder
     private lateinit var barTimer: ProgressBar
-    lateinit var fichajesBD: miSQLiteHelper
+    lateinit var fichajesBD: AyudaSQLite
 
     //Timer
     lateinit var ayudaContador: AyudaContador
@@ -65,7 +65,10 @@ class Fichar : Fragment() {
     //Id de la notificación
     private val ID_CANAL = "canal01"
 
+    var gpsStatus: Boolean = false
+
     @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_fichar, container, false)
 
@@ -84,16 +87,27 @@ class Fichar : Fragment() {
 
         //Botón para fichar
         view.findViewById<Button>(R.id.btn_fichar).setOnClickListener {
-            iniciarPararContador()
-            obtenerUbicación()
+            locationEnabled()
+            if (gpsStatus) {
+                iniciarPararContador()
+                obtenerUbicación()
+            }
+            else {
+                AwesomeDialog.build(requireActivity())
+                    .title("No se detecta GPS")
+                    .body("Para poder realizar un fichaje es necesario diponer de GPS")
+                    .icon(R.drawable.ic_falla)
+                    .onPositive("Aceptar") {
+                        Log.d("TAG", "positive ")
+                    }
+            }
+
         }
 
 
         //Timer
         tvTiempo = view.findViewById(R.id.txt_tiempo)
         ayudaContador = context?.let { AyudaContador(it) }!!
-
-
 
         if(ayudaContador.estaContando()) {
             iniciarContador()
@@ -109,21 +123,40 @@ class Fichar : Fragment() {
         timer.scheduleAtFixedRate(TimeTask(), 0, 1000)
 
 
-        //Builder para la notificación
-        createNotificationChannel()
-        builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
-            .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
-            .setContentTitle("Recuerda el fichaje de salida")
-            .setContentText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
+        //Se obtiene si la jornada es de 4 o de 8 horas obteniéndolo de MainActivity (obtenerDatosUsuario())
+        val preferencesTipoJornada: SharedPreferences = requireActivity().getSharedPreferences("tipoJornada", MODE_PRIVATE)
+        val tipoJornada = preferencesTipoJornada.getInt("tipo", 0)
 
         barTimer = view.findViewById(R.id.progress_bar)
 
+        //Dependiendo de la jornada la barra de progreso y el mensaje de la notificación será distinto
+        if(tipoJornada == 1) {
+            barTimer.max = 8*60*60  //8 horas
+            //Builder para la notificación
+            createNotificationChannel()
+            builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
+                .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
+                .setContentTitle("Recuerda el fichaje de salida")
+                .setContentText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
+                .setStyle(NotificationCompat.BigTextStyle()
+                    .bigText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        } else if(tipoJornada == 2) {
+            barTimer.max = 4*60*60  //4 horas
+            //Builder para la notificación
+            createNotificationChannel()
+            builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
+                .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
+                .setContentTitle("Recuerda el fichaje de salida")
+                .setContentText("Han pasado 4 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
+                .setStyle(NotificationCompat.BigTextStyle()
+                    .bigText("Han pasado 4 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        }
+
+
         //Se añade la lista de fichajes sin conexión
-        fichajesBD = miSQLiteHelper(requireContext())
+        fichajesBD = AyudaSQLite(requireContext())
         view.findViewById<FloatingActionButton>(R.id.btn_mostrar).setOnClickListener {
             // Para recuperar la información
             val db : SQLiteDatabase = fichajesBD.readableDatabase
@@ -158,16 +191,19 @@ class Fichar : Fragment() {
             activity?.let { ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101) }
         }
 
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if(location != null) {
-                //Se obtiene la latitud y la longitud
-                latitud = location.latitude.toString()
-                longitud = location.longitude.toString()
+        if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED ||
+            context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    //Se obtiene la latitud y la longitud
+                    latitud = location.latitude.toString()
+                    longitud = location.longitude.toString()
+                }
             }
         }
 
         //Comprobamos si hay conexión a internet a tiempo real y se lanzan los fichajes que se hayan realizado sin conexión
-        val networkConnection= NetworkConnection(requireContext())
+        val networkConnection= ConexionDeRed(requireContext())
         networkConnection.observe(requireActivity()) { isConnected ->
             if (isConnected) {
                 val db : SQLiteDatabase = fichajesBD.readableDatabase
@@ -192,6 +228,11 @@ class Fichar : Fragment() {
 
         return view
 
+    }
+
+    private fun locationEnabled() {
+        val locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager
+        gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     //Permite crear una notificación
@@ -323,6 +364,7 @@ class Fichar : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerUbicación() {
 
+
         //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
         if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } != PackageManager.PERMISSION_GRANTED &&
             context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
@@ -334,7 +376,6 @@ class Fichar : Fragment() {
                 //Se obtiene la latitud y la longitud
                 latitud = location.latitude.toString()
                 longitud = location.longitude.toString()
-
                 fichar()
             }
         }
@@ -346,7 +387,7 @@ class Fichar : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission", "Range")
     fun comprobarConexionFichar(context: Context) {
-        val gestorConexion = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val gestorConexion = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val capacidadesDeRed = gestorConexion.activeNetwork
         val infromacionDeRed = gestorConexion.getNetworkCapabilities(capacidadesDeRed)
         if (infromacionDeRed?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true || infromacionDeRed?.hasTransport(
@@ -430,10 +471,9 @@ class Fichar : Fragment() {
 
         val timer = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-
+        //Cuando termina la jornada laboral se manda una notificación
         if(timer.equals("00:00:10")) {
             with(NotificationManagerCompat.from(requireContext())) {
-                // notificationId is a unique int for each notification that you must define
                 notify(123, builder.build())
             }
         }

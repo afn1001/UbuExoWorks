@@ -1,11 +1,9 @@
 package com.example.ubuexoworks
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewManager
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.ubuexoworks.ClasesDeDatos.FichajeObtenido
 import com.example.ubuexoworks.Dialogs.BorrarFichajeDialog
-import java.util.Map.entry
 
 
 /**
@@ -72,7 +69,7 @@ class FichajeAdapter(private val mContext : Context, private val listaFichajes :
 
             val fragmentActivity = mContext as FragmentActivity
             val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
-            MyCustomDialog().show(fragmentManager, "UbicacionFragment")
+            FichajeDialog().show(fragmentManager, "UbicacionFragment")
         }
 
 

@@ -78,9 +78,6 @@ class Dietas : Fragment() {
             }
 
 
-        //Lugar donde guardamos la foto
-        //ivPhoto = view.findViewById(R.id.imagen)
-
         //Se comprueba si hay imagen y, si hay, se envía para poder ampliarla
         ivImagen = view.findViewById(R.id.iw_imagen)
         ivImagen.setOnClickListener {
@@ -132,18 +129,20 @@ class Dietas : Fragment() {
                     .addOnSuccessListener { visionText ->
                         //Si no reconoce texto en la imagen muestra un mensaje
                         if(visionText.text != "") {
-                            val resultado = buscarFloat(visionText.text)
-                            if (resultado == null || resultado.isEmpty())
-                            else {
-                                val totalF = Collections.max(resultado)
-                                val secondLargestF = findSecondLargestFloat(resultado)
-                                val total = totalF.toString()
-                                val vat = secondLargestF.toString()
-                                val receipts = Receipts(total, vat)
+                            val palabrasTicket = visionText.text.split(" ","\n")
+                            val numCif = palabrasTicket.indexOf("CIF:")
+                            val numIva = palabrasTicket.indexOf("21%")
+                            val numTotal = palabrasTicket.lastIndexOf("Total")
+                            val numFacNum = palabrasTicket.indexOf("núm:")
 
-                                etIva.setText(receipts.vat)
-                                etTotal.setText(receipts.total)
-                            }
+                            if(numCif!=-1)
+                                etDni.setText(palabrasTicket[numCif + 1])
+                            if(numIva!=-1)
+                                etIva.setText(palabrasTicket[numIva + 1])
+                            if(numTotal!=-1)
+                                etTotal.setText(palabrasTicket[numTotal + 1])
+                            if(numFacNum!=-1)
+                                etNumeroTicket.setText(palabrasTicket[numFacNum+1])
 
                         } else {
                             AwesomeDialog.build(requireActivity())

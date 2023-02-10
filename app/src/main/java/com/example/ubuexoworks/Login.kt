@@ -1,6 +1,8 @@
 package com.example.ubuexoworks
 
 
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -12,6 +14,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
+import android.view.animation.AnticipateInterpolator
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -37,17 +41,15 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var email: String = ""
     private var password: String = ""
     private var myImei: String = ""
-    private lateinit var fallo: TextView
     private var jsonId: Int = 0
     private var jsonToken: String = ""
     private lateinit var spinner: Spinner
 
+
+
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        //Quitamos el SplashScreen
-        Thread.sleep(1000)
-        setTheme(R.style.Theme_AppCompat_SplashScreen)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 

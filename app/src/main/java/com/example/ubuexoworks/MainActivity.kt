@@ -34,7 +34,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
  * @author Alejandro Fraga Neila
  */
 class MainActivity : AppCompatActivity() {
-    //Create our four fragments object
     lateinit var consultarCalendario: ConsultarCalendario
     lateinit var fichar: Fichar
     lateinit var dietas: Dietas
@@ -49,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //Sliding panel
+        //Panel deslizante
         val layout: SlidingUpPanelLayout = findViewById(R.id.slidingDown)
         layout.addPanelSlideListener(object: SlidingPaneLayout.PanelSlideListener{
             override fun onPanelSlide(panel: View, slideOffset: Float) {
@@ -75,20 +74,17 @@ class MainActivity : AppCompatActivity() {
         //Obtenermos los datos del usuario
         obtenerDatosUsuario()
 
-        //now let's create our framelayout and bottomnav variables
         var bottomnav = findViewById<BottomNavigationView>(R.id.BottomNavMenu)
-        var frame = findViewById<FrameLayout>(R.id.frameLayout)
-        //Now let's the deffault Fragment
+        //Se añade la pestaña por defecto
         fichar = Fichar()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frameLayout,fichar)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()
-        //now we will need to create our different fragemnts
-        //Now let's add the menu evenet listener
+        //Se crean las diferentes pestalas
         bottomnav.setOnItemSelectedListener { item ->
-            //we will select each menu item and add an event when it's selected
+            //Añadimos qué es lo que ocurre cuando se pulsa sobre cada pestaña
             when(item.itemId){
                 R.id.fichar -> {
                     fichar = Fichar()
@@ -121,7 +117,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun obtenerDatosUsuario() {
         comprobarConexion(applicationContext)
         val call: Call<String> = service.getDatosUsuario("Bearer " + tokenUsuario, idUsuario)
@@ -132,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                         val jsonUser = JSONObject(response.body()!!)
                         val nombre = jsonUser.optString("nombre")
                         val apellidos = jsonUser.optString("apellidos")
-                        val jornadaLaboral = jsonUser.optInt("idJornadaLaboral")
+                        val tipoJornadaLaboral = jsonUser.optInt("idJornadaLaboral")
                         val correo = jsonUser.optString("login")
 
                         val nombreView : TextView = findViewById(R.id.txt_nombreUsuario)
@@ -142,14 +137,19 @@ class MainActivity : AppCompatActivity() {
                         apellidosView.setText(apellidos)
 
                         val jornadaLaboralView : TextView = findViewById(R.id.txt_jornadaLaboral)
-                        if(jornadaLaboral == 1) {
+                        if(tipoJornadaLaboral == 1) {
                             jornadaLaboralView.setText("8 "+getString(R.string.horas))
-                        } else if(jornadaLaboral == 2) {
+                        } else if(tipoJornadaLaboral == 2) {
                             jornadaLaboralView.setText("4 "+getString(R.string.horas))
                         }
 
                         val correoView : TextView = findViewById(R.id.txt_correo)
                         correoView.setText(correo)
+
+                        val sp = getSharedPreferences("tipoJornada", Context.MODE_PRIVATE)
+                        val ed = sp.edit()
+                        ed.putInt("tipo", tipoJornadaLaboral)
+                        ed.commit()
 
 
                     } catch (e: Exception) {

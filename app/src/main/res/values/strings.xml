@@ -61,8 +61,8 @@
     <string name="tipoTicket">Tipo:</string>
     <string name="descripcion">Descripción:</string>
     <string name="numeroTicket">Número de ticket:</string>
-    <string name="reconocer_texto">Reconocer texto</string>
-    <string name="enviar_gasto">Enviar gasto</string>
+    <string name="reconocer_texto">Reconocer</string>
+    <string name="enviar_gasto">Enviar</string>
 
     <!-- Strings de recuperar contraseña -->
     <string name="introduce_correo">Introduce el correo electrónico \n asociado a tu cuenta.</string>

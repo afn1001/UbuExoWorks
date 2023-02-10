@@ -37,7 +37,6 @@ class ConsultarCalendario : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val view : View =  inflater.inflate(R.layout.fragment_consultar_calendario, container, false)
 
         //Se obtienen los datos del id de usuario

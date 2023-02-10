@@ -62,8 +62,8 @@
     <string name="tipoTicket">Type:</string>
     <string name="descripcion">Description:</string>
     <string name="numeroTicket">Ticket number:</string>
-    <string name="reconocer_texto">Recognize text</string>
-    <string name="enviar_gasto">Send allowance</string>
+    <string name="reconocer_texto">Recognize</string>
+    <string name="enviar_gasto">Send</string>
 
     <!-- Strings de recuperar contraseña -->
     <string name="introduce_correo">Enter the email associated \n with your account.</string>

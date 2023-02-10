@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class miSQLiteHelper(context: Context) : SQLiteOpenHelper(
+class AyudaSQLite(context: Context) : SQLiteOpenHelper(
     context, "fichajes.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -15,8 +15,7 @@ class miSQLiteHelper(context: Context) : SQLiteOpenHelper(
         db!!.execSQL(ordenCreacion)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?,
-                           oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val ordenBorrado = "DROP TABLE IF EXISTS fichajes"
         db!!.execSQL(ordenBorrado)
         onCreate(db)

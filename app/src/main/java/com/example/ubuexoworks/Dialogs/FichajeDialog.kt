@@ -27,7 +27,7 @@ import java.util.*
  * Clase para mostrar el mapa con la ubicación del fichaje que se quiera
  * @author Alejandro Fraga Neila
  */
-class MyCustomDialog: DialogFragment(), OnMapReadyCallback {
+class FichajeDialog: DialogFragment(), OnMapReadyCallback {
 
     private var hora: String = "00:00:00"
     private var longitud: Float = 0F
