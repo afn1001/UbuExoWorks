@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="70dp"
-            android:layout_height="55dp"
+            android:layout_width="140dp"
+            android:layout_height="110dp"
             android:layout_gravity="center"
             android:background="@drawable/ubuexoworks_logo"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,27 +36,28 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_correoLayout"
-            android:layout_width="350dp"
+            android:layout_width="@dimen/anchoParametroTablet"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="70dp">
 
             <EditText
                 android:id="@+id/et_correo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/altoParametroTablet"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/correo"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/textSizeTablet"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_contraseñaLayout"
-            android:layout_width="350dp"
+            android:layout_width="@dimen/anchoParametroTablet"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
@@ -64,33 +65,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_correoLayout"
             app:passwordToggleEnabled="true"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="40dp">
 
             <EditText
                 android:id="@+id/et_contraseña"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/altoParametroTablet"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/contraseña"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="@dimen/textSizeTablet"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/anchoParametroTablet"
+            android:layout_height="@dimen/altoParametroTablet"
             android:layout_gravity="center"
             android:background="@drawable/edit_text_bg"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_contraseñaLayout"
-            android:layout_marginTop="35dp"/>
+            android:layout_marginTop="45dp"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_registrarDispositivo"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/anchoParametroTablet"
+            android:layout_height="@dimen/altoParametroTablet"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:background="@drawable/edit_text_bg"
@@ -98,7 +101,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_recuperar_clave"
@@ -116,14 +120,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/olvida"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="@dimen/textSizeTablet"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/ayuda"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textSizeTablet"/>
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

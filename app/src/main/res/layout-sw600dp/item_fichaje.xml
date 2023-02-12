@@ -11,60 +11,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="15dp"
+        android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/layout_fecha"
-        android:layout_width="175dp"
+        android:layout_width="@dimen/anchoDatoFichaje"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_tipofichaje"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fecha" />
+            android:text="@string/fecha"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <TextView
             android:id="@+id/tv_fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margenLateralDietas"
-            android:text="Nada" />
+            android:text="Nada"
+            android:textSize="@dimen/textSizeTablet"/>
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/layout_hora"
-        android:layout_width="175dp"
+        android:layout_width="@dimen/anchoDatoFichaje"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_fecha"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hora" />
+            android:text="@string/hora"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <TextView
             android:id="@+id/tv_hora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margenLateralDietas"
-            android:text="Nada" />
+            android:text="Nada"
+            android:textSize="@dimen/textSizeTablet"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_latitud"
-        android:layout_width="175dp"
+        android:layout_width="@dimen/anchoDatoFichaje"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toEndOf="@id/layout_fecha"
@@ -74,19 +78,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/latitud" />
+            android:text="@string/latitud"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <TextView
             android:id="@+id/tv_latitud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margenLateralDietas"
-            android:text="Nada" />
+            android:text="Nada"
+            android:textSize="@dimen/textSizeTablet"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_longitud"
-        android:layout_width="175dp"
+        android:layout_width="@dimen/anchoDatoFichaje"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
@@ -97,34 +103,36 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/longitud" />
+            android:text="@string/longitud"
+            android:textSize="@dimen/textSizeTablet"/>
 
         <TextView
             android:id="@+id/tv_longitud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margenLateralDietas"
-            android:text="Nada" />
+            android:text="Nada"
+            android:textSize="@dimen/textSizeTablet"/>
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iw_ubicacion"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/ic_googlemaps"
         app:layout_constraintTop_toBottomOf="@id/layout_longitud"
         app:layout_constraintEnd_toStartOf="@+id/iw_eliminarFichaje"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="@dimen/margenLateralDietas"/>
 
     <ImageView
         android:id="@+id/iw_eliminarFichaje"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/cancel"
         app:layout_constraintTop_toBottomOf="@id/layout_longitud"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="40dp"
         android:layout_marginTop="@dimen/margenLateralDietas"/>
 
 

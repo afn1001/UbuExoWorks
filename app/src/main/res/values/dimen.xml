@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="parametro">190dp</dimen>
-    <dimen name="margen">5dp</dimen>
+    <!-- Dimensiones para un móvil de tamaño estándar -->
+    <dimen name="anchoParametro">350dp</dimen>
+
+    <dimen name="parametro">185dp</dimen>
+    <dimen name="margenLateralDietas">5dp</dimen>
+    <dimen name="margenTopDietas">20dp</dimen>
+    <dimen name="margenTextViewDatos">5dp</dimen>
+    <dimen name="margenTopDatos">10dp</dimen>
+
+    <!-- Dimensiones para tablet -->
+    <dimen name="anchoParametroTablet">550dp</dimen>
+    <dimen name="altoParametroTablet">75dp</dimen>
+    <dimen name="textSizeTablet">25dp</dimen>
+    <dimen name="anchoDatoFichaje">250dp</dimen>
+    <dimen name="anchoParametroDietasTablet">250dp</dimen>
+    <dimen name="margenLateralDietasTablet">30dp</dimen>
+    <dimen name="margenTopDietasTablet">20dp</dimen>
 </resources>

@@ -21,19 +21,28 @@
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-small/activity_main.xml" value="1.33125" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-small/dialog_mapa.xml" value="1.33125" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-small/login_layout.xml" value="1.0" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/activity_main.xml" value="0.18333333333333332" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/dialog_imagen.xml" value="0.18333333333333332" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/dialog_mapa.xml" value="0.1" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/fragment_consultar_calendario.xml" value="0.1" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/fragment_dietas.xml" value="0.21" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/fragment_fichar.xml" value="0.11406765676567657" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/item_fichaje.xml" value="0.2" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/login_layout.xml" value="0.18333333333333332" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout-sw600dp/recordar_clave_layout.xml" value="0.21" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/aaa.xml" value="0.25" />
-        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/all_login_layout.xml" value="0.1" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/calendario_layout.xml" value="0.25" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/dialog_imagen.xml" value="0.2" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/dialog_mapa.xml" value="0.30416666666666664" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/fragment_consultar_calendario.xml" value="0.25" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/fragment_datos_usuario.xml" value="0.25" />
-        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/fragment_dietas.xml" value="0.33" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/fragment_dietas.xml" value="0.22" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/fragment_fichar.xml" value="0.33" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/item_fichaje.xml" value="0.33" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/login_activity.xml" value="0.5" />
-        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/login_layout.xml" value="0.5" />
+        <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/login_layout.xml" value="0.33" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/recordar_clave_activity.xml" value="0.33" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/recordar_clave_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Informatica/5/2/Tfg/UbuExoWorks/app/src/main/res/layout/splash_screen.xml" value="0.2" />

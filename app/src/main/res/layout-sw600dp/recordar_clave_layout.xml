@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="70dp"
-        android:layout_height="55dp"
+        android:layout_width="140dp"
+        android:layout_height="110dp"
         android:layout_gravity="center"
         android:background="@drawable/ubuexoworks_logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,12 +33,13 @@
             android:layout_gravity="center"
             android:text="@string/introduce_correo"
             android:textAlignment="center"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="@dimen/textSizeTablet"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_correoRecuperacionLayout"
-        android:layout_width="350dp"
+        android:layout_width="@dimen/anchoParametroTablet"
         android:layout_height="wrap_content"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
@@ -50,15 +51,16 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_correoRecuperacion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/altoParametroTablet"
             android:background="@drawable/edit_text_bg"
-            android:hint="@string/correo" />
+            android:hint="@string/correo"
+            android:textSize="@dimen/textSizeTablet"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_enviarCorreo"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/anchoParametroTablet"
+        android:layout_height="@dimen/altoParametroTablet"
         android:layout_gravity="center"
         android:background="@drawable/edit_text_bg"
         android:onClick="cambiarClave"
@@ -66,7 +68,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_correoRecuperacionLayout"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="40dp"
+        android:textSize="@dimen/textSizeTablet"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
@@ -83,7 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/entrada_sistema"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/textSizeTablet"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
