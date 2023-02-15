@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="100dp">
 
     <ImageView
         android:id="@+id/imageView"
@@ -13,8 +14,7 @@
         android:background="@drawable/ubuexoworks_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -33,13 +33,12 @@
             android:layout_gravity="center"
             android:text="@string/introduce_correo"
             android:textAlignment="center"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="@dimen/textSizeSmall"/>
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_correoRecuperacionLayout"
-        android:layout_width="@dimen/anchoParametroSmall"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
@@ -51,24 +50,22 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_correoRecuperacion"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/altoParametroSmall"
+            android:layout_height="wrap_content"
             android:background="@drawable/edit_text_bg"
-            android:hint="@string/correo"
-            android:textSize="@dimen/textSizeSmall"/>
+            android:hint="@string/correo" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_enviarCorreo"
-        android:layout_width="@dimen/anchoParametroSmall"
-        android:layout_height="@dimen/altoParametroSmall"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/edit_text_bg"
         android:text="@string/enviar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_correoRecuperacionLayout"
-        android:layout_marginTop="20dp"
-        android:textSize="@dimen/textSizeSmall"/>
+        android:layout_marginTop="40dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
@@ -85,8 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/entrada_sistema"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/textSizeSmall"/>
+            android:textColor="@color/colorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

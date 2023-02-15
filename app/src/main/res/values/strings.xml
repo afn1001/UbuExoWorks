@@ -25,6 +25,7 @@
     <!--Strings del fichaje -->
     <string name="fichar">Fichar</string>
     <string name="esperar">Debes esperar al menos 5 minutos hasta realizar el siguiente fichaje</string>
+    <string name="hora_inicio">00:00:00</string>
 
     <!--Strings del item de cada fichaje -->
     <string name="fichaje_entrada">Fichaje de entrada</string>
@@ -44,6 +45,7 @@
     <string name="correo">Correo electrónico</string>
     <string name="contraseña">Contraseña</string>
     <string name="registrar">Registrar</string>
+    <string name="login">Login</string>
 
     <!--Strings de dialog para borrar el fichaje -->
     <string name="pregunta">¿Estás seguro de que quieres eliminar este fichaje?</string>

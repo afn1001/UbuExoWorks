@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/iw_imagen"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_margin="30dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,187 +35,177 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_taxLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iw_imagen"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginLeft="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginLeft="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_tax"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/iva"
                 android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="7" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_dniLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iw_imagen"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginRight="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginRight="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_dni"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/dni"
                 android:inputType="text"
-                android:maxLength="9"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="9" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_totalLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_taxLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginLeft="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginLeft="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_total"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/total"
                 android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="7" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_razonSocialLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_dniLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginRight="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginRight="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_razonSocial"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/razonSocial"
                 android:inputType="text"
-                android:maxLength="15"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="15" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_tipoTicketLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_totalLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginLeft="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginLeft="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_tipoTicket"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/tipoTicket"
                 android:inputType="text"
-                android:maxLength="15"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="15" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_descripcionLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_razonSocialLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginRight="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginRight="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_descripcion"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/descripcion"
                 android:inputType="text"
-                android:maxLength="30"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="30" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_numeroTicketLayout"
-            android:layout_width="@dimen/anchoParametroDietasSmall"
+            android:layout_width="@dimen/parametro"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_tipoTicketLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginLeft="@dimen/margenLateralDietasSmall">
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginLeft="@dimen/margenLateralDietas">
 
             <EditText
                 android:id="@+id/et_numeroTicket"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoParametroSmall"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/numeroTicket"
                 android:inputType="number"
-                android:maxLength="20"
-                android:textSize="@dimen/textSizeSmall"/>
+                android:maxLength="20" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <Button
             android:id="@+id/btn_reconocerTexto"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/altoParametroSmall"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
             android:background="@drawable/edit_text_bg"
             android:text="@string/reconocer_texto"
-            android:textSize="@dimen/textSizeSmall"
             app:layout_constraintEnd_toStartOf="@+id/btn_enviarGasto"
             app:layout_constraintTop_toBottomOf="@+id/et_numeroTicketLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginRight="@dimen/margenLateralDietasSmall"/>
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginRight="@dimen/margenLateralDietas"/>
+
 
         <Button
             android:id="@+id/btn_enviarGasto"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/altoParametroSmall"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
             android:background="@drawable/edit_text_bg"
             android:text="@string/enviar_gasto"
-            android:textSize="@dimen/textSizeSmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_numeroTicketLayout"
-            android:layout_marginTop="@dimen/margenTopDietasSmall"
-            android:layout_marginRight="@dimen/margenLateralDietasSmall"/>
+            android:layout_marginTop="@dimen/margenTopDietas"
+            android:layout_marginRight="@dimen/margenLateralDietas"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 </ScrollView>

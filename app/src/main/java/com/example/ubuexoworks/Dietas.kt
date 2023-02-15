@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.serialization.descriptors.StructureKind
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +40,7 @@ import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Clase de la pestaña "Dietas" que sirve para realizar el escaneo de tickets y su posterior envío
@@ -70,8 +72,7 @@ class Dietas : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_dietas, container, false)
 
 
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     accionesCamara(result.data)
                 }
@@ -119,53 +120,10 @@ class Dietas : Fragment() {
         //Creamos el servicio
         service = (activity as MainActivity).createApiService()
 
+        //Mediante OCR se obtienen los datos de la imagen y se añaden a los EditText
         val botonReconocerTexto : Button = view.findViewById(R.id.btn_reconocerTexto)
         botonReconocerTexto.setOnClickListener { view ->
-            //Si no hay imagen no se puede reconocer el texto
-            if(ivImagen.drawable != null) {
-                image = InputImage.fromBitmap(bitmap, 0)
-                val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-                recognizer.process(image)
-                    .addOnSuccessListener { visionText ->
-                        //Si no reconoce texto en la imagen muestra un mensaje
-                        if(visionText.text != "") {
-                            val palabrasTicket = visionText.text.split(" ","\n")
-                            val numCif = palabrasTicket.indexOf("CIF:")
-                            val numIva = palabrasTicket.indexOf("21%")
-                            val numTotal = palabrasTicket.lastIndexOf("Total")
-                            val numFacNum = palabrasTicket.indexOf("núm:")
-
-                            if(numCif!=-1)
-                                etDni.setText(palabrasTicket[numCif + 1])
-                            if(numIva!=-1)
-                                etIva.setText(palabrasTicket[numIva + 1])
-                            if(numTotal!=-1)
-                                etTotal.setText(palabrasTicket[numTotal + 1])
-                            if(numFacNum!=-1)
-                                etNumeroTicket.setText(palabrasTicket[numFacNum+1])
-
-                        } else {
-                            AwesomeDialog.build(requireActivity())
-                                .title("No hay texto")
-                                .body("No se ha podido reconocer texto en la imagen")
-                                .onPositive("Aceptar") {
-                                    Log.d("TAG", "positive ")
-                                }
-                        }
-
-                    }
-                    .addOnFailureListener { e ->
-                        // Task failed with an exception
-                        // ...
-                    }
-            } else {
-                AwesomeDialog.build(requireActivity())
-                    .title("No se ha podido reconocer")
-                    .body("No se ha podido reconocer texto porque no hay ninguna imagen")
-                    .onPositive("Aceptar") {
-                        Log.d("TAG", "positive ")
-                    }
-            }
+            reconocerTexto()
         }
 
 
@@ -187,6 +145,47 @@ class Dietas : Fragment() {
         return view
     }
 
+    private fun reconocerTexto() {
+        //Si no hay imagen no se puede reconocer el texto
+        if(ivImagen.drawable != null) {
+            image = InputImage.fromBitmap(bitmap, 0)
+            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+            recognizer.process(image)
+                .addOnSuccessListener { visionText ->
+                    //Si no reconoce texto en la imagen muestra un mensaje
+                    if(visionText.text != "") {
+                        val palabrasTicket = visionText.text.split(" ","\n")
+                        obtenerTextoQueSigue(palabrasTicket, "CIF:", etDni)
+                        obtenerTextoQueSigue(palabrasTicket, "21%", etIva)
+                        obtenerTextoQueSigue(palabrasTicket, "Total", etTotal)
+                        obtenerTextoQueSigue(palabrasTicket, "núm:", etNumeroTicket)
+
+                    } else {
+                        AwesomeDialog.build(requireActivity())
+                            .title("No hay texto")
+                            .body("No se ha podido reconocer texto en la imagen")
+                            .onPositive("Aceptar") {
+                                Log.d("TAG", "positive ")
+                            }
+                    }
+
+                }
+        } else {
+            AwesomeDialog.build(requireActivity())
+                .title("No se ha podido reconocer")
+                .body("No se ha podido reconocer texto porque no hay ninguna imagen")
+                .onPositive("Aceptar") {
+                    Log.d("TAG", "positive ")
+                }
+        }
+    }
+
+    private fun obtenerTextoQueSigue(palabrasTicket: List<String>, palabra: String, editText: EditText) {
+        val posicion = palabrasTicket.lastIndexOf(palabra)
+        if(posicion !=-1)
+            editText.setText(palabrasTicket[posicion + 1])
+    }
+
     private fun encodeImage(bitmap: Bitmap): String {
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -204,7 +203,6 @@ class Dietas : Fragment() {
 
         val gasto = Gasto(file, idUsuario.toInt(), fecha, etTipoTicket.text.toString(), etTotal.text.toString().toDouble(), etIva.text.toString().toDouble(),
             etDni.text.toString(), etRazonSocial.text.toString(), etDescripcion.text.toString(), etNumeroTicket.text.toString())
-        Log.d("gasto", gasto.toString())
         val call = service.registrarGasto("Bearer " + tokenUsuario, gasto)
 
         call.enqueue(object : Callback<String> {
@@ -241,36 +239,6 @@ class Dietas : Fragment() {
             }
         })
     }
-
-    private fun findSecondLargestFloat(input: ArrayList<Float>?): Float {
-        if (input == null || input.isEmpty() || input.size == 1) return 0.0f
-        else {
-            try {
-                val tempSet = HashSet(input)
-                val sortedSet = TreeSet(tempSet)
-                return sortedSet.elementAt(sortedSet.size - 2)
-            } catch (e: Exception) {
-                return 0.0f
-            }
-        }
-    }
-
-    /**
-     * Se obtienen los float almacenados de un texto (texto obtenido del ticket)
-     * @param texto Texto de la imagen realizada
-     */
-    fun buscarFloat(texto: String): ArrayList<Float> {
-        if (this == null || texto.isEmpty()) return ArrayList<Float>()
-        val resultado = ArrayList<Float>()
-        val resultadosCoincidentes = Regex(pattern = "[+-]?([0-9]*[.])?[0-9]+").findAll(texto)
-        if (resultadosCoincidentes != null)
-            for (txt in resultadosCoincidentes) {
-                if (txt.value.isFloatAndWhole()) resultado.add(txt.value.toFloat())
-            }
-        return resultado
-    }
-
-    private fun String.isFloatAndWhole() = this.matches("\\d*\\.\\d*".toRegex())
 
     private fun tomarFotografía() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) !== PackageManager.PERMISSION_GRANTED) {

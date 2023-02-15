@@ -26,6 +26,7 @@
     <!--Strings del fichaje -->
     <string name="fichar">Record</string>
     <string name="esperar">You must wait at least 5 minutes until making the next record</string>
+    <string name="hora_inicio">00:00:00</string>
 
     <!--Strings del item de cada fichaje -->
     <string name="fichaje_entrada">Entry record</string>
@@ -45,6 +46,7 @@
     <string name="contraseña">Password</string>
     <string name="app_name">UbuExoWorks</string>
     <string name="registrar">Register</string>
+    <string name="login">Login</string>
 
     <!--Strings de dialog para borrar el fichaje  -->
     <string name="pregunta">Are you sure you want to delete this signing?</string>

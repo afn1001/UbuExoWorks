@@ -12,9 +12,18 @@
     <!-- Dimensiones para tablet -->
     <dimen name="anchoParametroTablet">550dp</dimen>
     <dimen name="altoParametroTablet">75dp</dimen>
-    <dimen name="textSizeTablet">25dp</dimen>
+    <dimen name="textSizeTablet">25sp</dimen>
     <dimen name="anchoDatoFichaje">250dp</dimen>
     <dimen name="anchoParametroDietasTablet">250dp</dimen>
     <dimen name="margenLateralDietasTablet">30dp</dimen>
     <dimen name="margenTopDietasTablet">20dp</dimen>
+
+    <!-- Dimensiones para móvil pequeño -->
+    <dimen name="anchoParametroSmall">300dp</dimen>
+    <dimen name="altoParametroSmall">50dp</dimen>
+    <dimen name="textSizeSmall">15sp</dimen>
+    <dimen name="anchoDatoFichajeSmall">120dp</dimen>
+    <dimen name="anchoParametroDietasSmall">150dp</dimen>
+    <dimen name="margenLateralDietasSmall">5dp</dimen>
+    <dimen name="margenTopDietasSmall">5dp</dimen>
 </resources>

@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import android.widget.*
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.awesomedialog.*
@@ -71,6 +72,7 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val emailInput = findViewById<EditText>(R.id.et_correo)
         val passwordInput = findViewById<EditText>(R.id.et_contraseña)
 
+        //Obtenemos el número identificativo del móvil
         myImei=Settings.Secure.getString(getContentResolver(),
             Settings.Secure.ANDROID_ID)
 
@@ -248,10 +250,10 @@ class Login : AppCompatActivity(), AdapterView.OnItemSelectedListener {
      * Permite cambiar el idioma
      */
     fun cambiarIdioma(activity: Activity, langCode: String) {
-        var locale = Locale(langCode)
+        val locale = Locale(langCode)
         Locale.setDefault(locale)
-        var resources = activity.resources
-        var config = resources.configuration
+        val resources = activity.resources
+        val config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }

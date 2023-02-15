@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,49 +13,48 @@
             android:id="@+id/cdvCalendario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/CalenderViewCustom"
-            android:weekDayTextAppearance="@android:color/darker_gray"
+            android:layout_gravity="center"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/CalenderViewCustom"
+            android:weekDayTextAppearance="@android:color/darker_gray"/>
 
 
         <ListView
             android:id="@+id/lv_fichajes"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="10dp"
+            android:layout_height="300dp"
             android:background="@drawable/borde_fichajes"
+            android:layout_margin="10dp"
             android:padding="10dp"
             android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/cdvCalendario"
             app:layout_constraintRight_toRightOf="@id/cdvCalendario"
-            app:layout_constraintTop_toBottomOf="@id/cdvCalendario" />
+            app:layout_constraintTop_toBottomOf="@id/cdvCalendario"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/lv_fichajes"
             app:layout_constraintLeft_toLeftOf="@id/lv_fichajes"
             app:layout_constraintRight_toRightOf="@id/lv_fichajes"
-            app:layout_constraintTop_toTopOf="@id/lv_fichajes" />
+            app:layout_constraintTop_toTopOf="@id/lv_fichajes"
+            app:layout_constraintBottom_toBottomOf="@id/lv_fichajes"
+            android:indeterminateTint="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/vacio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/vacio"
-            android:textSize="@dimen/textSizeTablet"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/lv_fichajes"
+            android:layout_gravity="center"
             app:layout_constraintLeft_toLeftOf="@id/lv_fichajes"
             app:layout_constraintRight_toRightOf="@id/lv_fichajes"
-            app:layout_constraintTop_toTopOf="@id/lv_fichajes" />
-
+            app:layout_constraintTop_toTopOf="@id/lv_fichajes"
+            app:layout_constraintBottom_toBottomOf="@id/lv_fichajes"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

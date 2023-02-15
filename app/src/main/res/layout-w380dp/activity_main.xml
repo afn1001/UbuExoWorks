@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    android:gravity="top"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/slidingDown"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/BottomNavMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="12dp"
+            android:elevation="2dp"
+            app:menu="@menu/bottom_menu"
+            android:background="@drawable/bottomnav_bg"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewDatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/titulo_datos_usuario"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_datos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_fichajes"
+            android:orientation="vertical"
+            android:padding="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDatos"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:id="@+id/textViewNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/txt_nombreUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/textViewNombre"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="@dimen/margenTextViewDatos"/>
+
+            <TextView
+                android:id="@+id/textViewApellidos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apellidos"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNombre"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+            <TextView
+                android:id="@+id/txt_apellidosUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/textViewApellidos"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNombre"
+                android:layout_marginLeft="@dimen/margenTextViewDatos"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+            <TextView
+                android:id="@+id/textViewJornada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jornadaLaboral"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewApellidos"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+            <TextView
+                android:id="@+id/txt_jornadaLaboral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/textViewJornada"
+                app:layout_constraintTop_toBottomOf="@+id/textViewApellidos"
+                android:layout_marginLeft="@dimen/margenTextViewDatos"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+            <TextView
+                android:id="@+id/textViewCorreo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/correoElectronico"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewJornada"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+            <TextView
+                android:id="@+id/txt_correo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/textViewCorreo"
+                app:layout_constraintTop_toBottomOf="@+id/textViewJornada"
+                android:layout_marginLeft="@dimen/margenTextViewDatos"
+                android:layout_marginTop="@dimen/margenTopDatos"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="﹀"
+            android:textSize="20sp"
+            android:id="@+id/txt_datos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -132,26 +132,11 @@ class Fichar : Fragment() {
         //Dependiendo de la jornada la barra de progreso y el mensaje de la notificación será distinto
         if(tipoJornada == 1) {
             barTimer.max = 8*60*60  //8 horas
-            //Builder para la notificación
-            createNotificationChannel()
-            builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
-                .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
-                .setContentTitle("Recuerda el fichaje de salida")
-                .setContentText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
-                .setStyle(NotificationCompat.BigTextStyle()
-                    .bigText("Han pasado 8 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            crearNotificacion(8)
+
         } else if(tipoJornada == 2) {
             barTimer.max = 4*60*60  //4 horas
-            //Builder para la notificación
-            createNotificationChannel()
-            builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
-                .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
-                .setContentTitle("Recuerda el fichaje de salida")
-                .setContentText("Han pasado 4 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
-                .setStyle(NotificationCompat.BigTextStyle()
-                    .bigText("Han pasado 4 horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            crearNotificacion(4)
         }
 
 
@@ -159,33 +144,74 @@ class Fichar : Fragment() {
         fichajesBD = AyudaSQLite(requireContext())
         view.findViewById<FloatingActionButton>(R.id.btn_mostrar).setOnClickListener {
             // Para recuperar la información
-            val db : SQLiteDatabase = fichajesBD.readableDatabase
-            val cursor = db.rawQuery(
-                "SELECT * FROM fichajes",
-                null)
-
-            var result = ""
-            if (cursor.moveToFirst()) {
-                do {
-                    result = result + cursor.getInt(0).toString() + " - " +
-                            cursor.getString(1) + " - " +
-                            cursor.getString(2) + "\n"
-
-
-                } while (cursor.moveToNext())
-            }
-            AwesomeDialog.build(requireActivity())
-                .title("Fichajes en espera")
-                .body(result)
-                .icon(R.drawable.ic_sinconexion)
-                .onPositive("Aceptar") {
-                    Log.d("TAG", "positive ")
-                }
+            obtenerFichajesEnEspera()
         }
 
 
         //Se obtiene la ubicación al entrar en la pestaña
         //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
+        obtenerPermisosUbicacionInicio()
+
+        //Comprobamos si hay conexión a internet a tiempo real y se lanzan los fichajes que se hayan realizado sin conexión
+        val networkConnection= ConexionDeRed(requireContext())
+        networkConnection.observe(requireActivity()) { isConnected ->
+            if (isConnected) {
+                lanzarFichajesEnEspera()
+            } else {
+            }
+        }
+
+        return view
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun lanzarFichajesEnEspera() {
+        val db : SQLiteDatabase = fichajesBD.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT * FROM fichajes",
+            null)
+
+        var fecha = ""
+        var hora = ""
+        if (cursor.moveToFirst()) {
+            do {
+                fecha = cursor.getString(1)
+                hora = cursor.getString(2)
+                ficharSinConexion(fecha, hora)
+            } while (cursor.moveToNext())
+        }
+
+        fichajesBD.borrarTabla()
+    }
+
+    private fun obtenerFichajesEnEspera() {
+        val db : SQLiteDatabase = fichajesBD.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT * FROM fichajes",
+            null)
+
+        var result = ""
+        if (cursor.moveToFirst()) {
+            do {
+                result = result + cursor.getInt(0).toString() + " - " +
+                        cursor.getString(1) + " - " +
+                        cursor.getString(2) + "\n"
+
+
+            } while (cursor.moveToNext())
+        }
+        AwesomeDialog.build(requireActivity())
+            .title("Fichajes en espera")
+            .body(result)
+            .icon(R.drawable.ic_sinconexion)
+            .onPositive("Aceptar") {
+                Log.d("TAG", "positive ")
+            }
+    }
+
+    @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    private fun obtenerPermisosUbicacionInicio() {
         if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } != PackageManager.PERMISSION_GRANTED &&
             context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
             activity?.let { ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101) }
@@ -201,33 +227,18 @@ class Fichar : Fragment() {
                 }
             }
         }
+    }
 
-        //Comprobamos si hay conexión a internet a tiempo real y se lanzan los fichajes que se hayan realizado sin conexión
-        val networkConnection= ConexionDeRed(requireContext())
-        networkConnection.observe(requireActivity()) { isConnected ->
-            if (isConnected) {
-                val db : SQLiteDatabase = fichajesBD.readableDatabase
-                val cursor = db.rawQuery(
-                    "SELECT * FROM fichajes",
-                    null)
-
-                var fecha = ""
-                var hora = ""
-                if (cursor.moveToFirst()) {
-                    do {
-                        fecha = cursor.getString(1)
-                        hora = cursor.getString(2)
-                        ficharSinConexion(fecha, hora)
-                    } while (cursor.moveToNext())
-                }
-
-                fichajesBD.borrarTabla()
-            } else {
-            }
-        }
-
-        return view
-
+    private fun crearNotificacion(horas: Int) {
+        //Builder para la notificación
+        createNotificationChannel()
+        builder = NotificationCompat.Builder(requireContext(), ID_CANAL)
+            .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_check_to_on_mtrl_015)
+            .setContentTitle("Recuerda el fichaje de salida")
+            .setContentText("Han pasado " + horas + " horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("Han pasado " + horas + " horas desde tu fichaje de entrada, recuerda realizar el fichaje de salida"))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     }
 
     private fun locationEnabled() {
@@ -363,8 +374,6 @@ class Fichar : Fragment() {
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obtenerUbicación() {
-
-
         //Comprobamos que se disponene de los permisos necesarios para obtener la ubicación
         if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } != PackageManager.PERMISSION_GRANTED &&
             context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
